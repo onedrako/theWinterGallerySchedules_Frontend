@@ -9,7 +9,7 @@ const ListOfItemsToEdit = ({ type }) => {
   const comments = [1]
 
   return (
-    <>
+    <div className='container' >
       <div>
         { type === 'schedule'
           ? items.map(item => <ScheduleItem key={1}/>)
@@ -23,6 +23,11 @@ const ListOfItemsToEdit = ({ type }) => {
       </div>
 
       <style jsx>{`
+        .container{
+          margin-bottom: 25px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #ccc;
+        }
         .addNewItemContainer{
           display: flex;
           align-items: center;
@@ -36,7 +41,7 @@ const ListOfItemsToEdit = ({ type }) => {
           font-size: 1.4rem;
         }
       `}</style>
-    </>
+    </div>
 
   )
 }
