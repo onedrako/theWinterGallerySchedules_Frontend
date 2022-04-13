@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useFormik } from 'formik'
 
-import { FaEdit } from 'react-icons/fa'
 import iconsStyles from '../../styles/iconStyles.module.css'
 import { BsFillCheckCircleFill } from 'react-icons/bs'
+import { FaEdit } from 'react-icons/fa'
 import { MdDeleteForever, MdCancel } from 'react-icons/md'
 
 const NoteItem = () => {

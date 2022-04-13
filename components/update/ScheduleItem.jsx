@@ -113,7 +113,7 @@ const ScheduleItem = () => {
           padding: 5px;
         }
         .timeInput{
-          width: 120px;
+          width: 130px;
           height: 35px;
           border-radius: 10px;
           border: 1px solid #ccc;
