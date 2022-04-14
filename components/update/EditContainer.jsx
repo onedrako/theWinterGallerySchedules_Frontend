@@ -1,14 +1,17 @@
-import React from 'react'
+import { useState } from 'react'
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
 
+import schedulesData from './../../mocks/schedules.js'
+
 const EditDataContainer = () => {
+  const [schedules, setSchedules] = useState(schedulesData)
   return (
     <>
       <section className="container">
         <h2 className="title">Actualizar Datos</h2>
         <h3>Horarios</h3>
-        <ListOfItemsToEdit type={'schedule'} />
+        <ListOfItemsToEdit type={'schedule'} schedules={schedules} setSchedules={setSchedules}/>
         <h3>Notas</h3>
         <ListOfItemsToEdit type={'note'}/>
         <h3>Semana</h3>

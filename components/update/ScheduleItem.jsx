@@ -7,17 +7,25 @@ import { MdDeleteForever, MdCancel } from 'react-icons/md'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const ScheduleItem = () => {
+const ScheduleItem = ({ scheduleData, editSchedule }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const formik = useFormik({
     initialValues: {
-      title: '',
-      initialTime: '',
-      finalTime: ''
+      title: scheduleData.title,
+      initialTime: scheduleData.initialTime.substr(0, 5),
+      finalTime: scheduleData.finalTime.substr(0, 5)
     },
     onSubmit: values => {
-      console.log(values)
+      const { id } = scheduleData
+      const itemEdited = {
+        id,
+        title: values.title,
+        initialTime: values.initialTime,
+        finalTime: values.finalTime,
+        updatedAt: new Date()
+      }
+      editSchedule(itemEdited)
       setIsEditing(false)
     }
   })
@@ -28,7 +36,7 @@ const ScheduleItem = () => {
       ? (
       <div className='container'>
         <form className='container__data' onSubmit={formik.handleSubmit}>
-          <input className='titleInput' type="Text" placeholder='Titulo' {...formik.getFieldProps('title')} />
+          <input className='titleInput' type="Text" {...formik.getFieldProps('title')} />
           <div className='container__data--schedule divisionInElement'>
             <input className='timeInput' type="time" {...formik.getFieldProps('initialTime')} />
             <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
@@ -36,7 +44,7 @@ const ScheduleItem = () => {
           </div>
           <div className='container__data--options'>
             <BsFillCheckCircleFill size={20} className={iconsStyles.divisionIcon} color="green" alt="Aceptar" onClick={formik.handleSubmit}/>
-            <MdCancel size={23} className={iconsStyles.divisionIcon} color="red" alt="Rechazar" onClick={() => setIsEditing(false) } />
+            <MdCancel size={23} className={iconsStyles.divisionIcon} color="red" alt="Rechazar" onClick={() => setIsEditing(false)}/>
           </div>
 
         </form>
@@ -45,11 +53,11 @@ const ScheduleItem = () => {
       : (
       <div className='container'>
       <div className='container__data'>
-        <h3>MAÑANA</h3>
+        <h3>{scheduleData.title}</h3>
         <div className='container__data--schedule divisionInElement'>
-          <h3>10:00</h3>
+          <h3>{scheduleData.initialTime.substr(0, 5) }</h3>
           <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
-          <h3 >12:00</h3>
+          <h3 >{scheduleData.finalTime.substr(0, 5) }</h3>
         </div>
         <div className='container__data--options'>
           <FaEdit size={20} className={iconsStyles.divisionIcon} onClick={() => setIsEditing(true)} />

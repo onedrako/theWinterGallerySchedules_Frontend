@@ -1,18 +1,31 @@
-import React from 'react'
+import { useState } from 'react'
 import ScheduleItem from './ScheduleItem'
 import NoteItem from './NoteItem'
 import { FaPlusCircle } from 'react-icons/fa'
-// import iconsStyles from '../../styles/iconStyles.module.css'
 
-const ListOfItemsToEdit = ({ type }) => {
-  const items = [1]
+const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
   const comments = [1]
+
+  const editSchedule = (itemEdited) => {
+    const allSchedules = [...schedules]
+
+    const { id } = itemEdited
+    const index = allSchedules.findIndex(schedule => schedule.id === id)
+
+    allSchedules[index] = { ...schedules[index], ...itemEdited }
+    setSchedules(allSchedules)
+  }
+
+  // const addNewSchedule = (newItemEdited) => {
+  //   setSchedules([...schedules, itemEdited])
+  //   console.log(schedules)
+  // }
 
   return (
     <div className='container' >
       <div>
         { type === 'schedule'
-          ? items.map(item => <ScheduleItem key={1}/>)
+          ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule}/>)
           : comments.map(comment => <NoteItem key={2}/>)
         }
       </div>
