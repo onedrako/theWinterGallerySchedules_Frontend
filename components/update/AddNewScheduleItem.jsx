@@ -1,74 +1,58 @@
+import React from 'react'
 import { useFormik } from 'formik'
-import { useState } from 'react'
+import * as Yup from 'yup'
 
 import { BsFillArrowRightSquareFill, BsFillCheckCircleFill } from 'react-icons/bs'
-import { FaEdit } from 'react-icons/fa'
-import { MdDeleteForever, MdCancel } from 'react-icons/md'
+import { MdCancel } from 'react-icons/md'
+
+import sanitizeObject from '../../utils/sanitizeObject'
+import objectPrepared from '../../utils/prepareObject'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const ScheduleItem = ({ scheduleData, editSchedule }) => {
-  const [isEditing, setIsEditing] = useState(false)
-
+const AddNewScheduleItem = ({ setVisible, addItem }) => {
   const formik = useFormik({
     initialValues: {
-      title: scheduleData.title,
-      initialTime: scheduleData.initialTime.substr(0, 5),
-      finalTime: scheduleData.finalTime.substr(0, 5)
+      title: '',
+      initialTime: '',
+      finalTime: ''
     },
     onSubmit: values => {
-      const { id } = scheduleData
-      const itemEdited = {
-        id,
-        title: values.title,
-        initialTime: values.initialTime,
-        finalTime: values.finalTime
-      }
-      editSchedule(itemEdited)
-      setIsEditing(false)
-    }
+      const safeObject = sanitizeObject(values)
+      safeObject.updatedBy = 'admin'
+      const preparedObject = objectPrepared(safeObject)
+      addItem(preparedObject)
+      setVisible(false)
+    },
+    validationSchema: Yup.object({
+      title: Yup.string(),
+      initialTime: Yup.string().required('Debes elegir una Hora de inicio'),
+      finalTime: Yup.string()
+    })
   })
 
   return (
     <>
-    {isEditing
-      ? (
       <div className='container'>
         <form className='container__data' onSubmit={formik.handleSubmit}>
           <input className='titleInput' type="Text" {...formik.getFieldProps('title')} />
           <div className='container__data--schedule divisionInElement'>
-            <input className='timeInput' type="time" {...formik.getFieldProps('initialTime')} />
+            <div>
+              <input className='timeInput' type="time" {...formik.getFieldProps('initialTime')}/>
+              {formik.errors.initialTime && <p>{formik.errors.initialTime}</p>}
+            </div>
             <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
             <input className='timeInput' type="time" {...formik.getFieldProps('finalTime')} />
           </div>
           <div className='container__data--options'>
             <BsFillCheckCircleFill size={20} className={iconsStyles.divisionIcon} color="green" alt="Aceptar" onClick={formik.handleSubmit}/>
-            <MdCancel size={23} className={iconsStyles.divisionIcon} color="red" alt="Rechazar" onClick={() => setIsEditing(false)}/>
+            <MdCancel size={23} className={iconsStyles.divisionIcon} color="red" alt="Rechazar" onClick={() => setVisible(false)}/>
           </div>
 
         </form>
       </div>
-        )
-      : (
-      <div className='container'>
-      <div className='container__data'>
-        <h3>{scheduleData.title}</h3>
-        <div className='container__data--schedule divisionInElement'>
-          <h3>{scheduleData.initialTime.substr(0, 5) }</h3>
-          <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
-          <h3 >{scheduleData.finalTime.substr(0, 5) }</h3>
-        </div>
-        <div className='container__data--options'>
-          <FaEdit size={20} className={iconsStyles.divisionIcon} onClick={() => setIsEditing(true)} />
-          <MdDeleteForever size={20} className={iconsStyles.divisionIcon}/>
-        </div>
 
-      </div>
-      </div>
-        )
-    }
-
-      <style jsx>{`
+    <style jsx>{`
         .container{
           padding: 10px;
           width: 100%;
@@ -130,7 +114,8 @@ const ScheduleItem = ({ scheduleData, editSchedule }) => {
         }
       `}</style>
     </>
+
   )
 }
 
-export default ScheduleItem
+export default AddNewScheduleItem

@@ -1,11 +1,19 @@
-import { useState } from 'react'
+
+import { useState, useEffect } from 'react'
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
 
 import schedulesData from './../../mocks/schedules.js'
+import axios from 'axios'
 
 const EditDataContainer = () => {
-  const [schedules, setSchedules] = useState(schedulesData)
+  const [schedules, setSchedules] = useState([])
+
+  useEffect(() => {
+    const data = axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
+      .then(res => setSchedules(res.data))
+  }, [])
+
   return (
     <>
       <section className="container">

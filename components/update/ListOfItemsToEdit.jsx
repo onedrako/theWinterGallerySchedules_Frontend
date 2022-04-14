@@ -1,9 +1,14 @@
 import { useState } from 'react'
-import ScheduleItem from './ScheduleItem'
-import NoteItem from './NoteItem'
+import axios from 'axios'
+
 import { FaPlusCircle } from 'react-icons/fa'
 
+import ScheduleItem from './ScheduleItem'
+import NoteItem from './NoteItem'
+import AddNewScheduleItem from './AddNewScheduleItem'
+
 const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
+  const [addingNewItem, setAddingNewItem] = useState(false)
   const comments = [1]
 
   const editSchedule = (itemEdited) => {
@@ -16,10 +21,9 @@ const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
     setSchedules(allSchedules)
   }
 
-  // const addNewSchedule = (newItemEdited) => {
-  //   setSchedules([...schedules, itemEdited])
-  //   console.log(schedules)
-  // }
+  const addNewSchedule = (newItem) => {
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, newItem)
+  }
 
   return (
     <div className='container' >
@@ -28,9 +32,10 @@ const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
           ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule}/>)
           : comments.map(comment => <NoteItem key={2}/>)
         }
+        { addingNewItem && <AddNewScheduleItem visible={addingNewItem} setVisible={setAddingNewItem} addItem={addNewSchedule}/> }
       </div>
 
-      <div className='addNewItemContainer' >
+      <div className='addNewItemContainer' onClick={() => setAddingNewItem(true)} >
         <FaPlusCircle size={25} />
         <p>Añadir nuevo elemento</p>
       </div>
