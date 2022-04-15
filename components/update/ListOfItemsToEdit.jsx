@@ -7,38 +7,43 @@ import ScheduleItem from './ScheduleItem'
 import NoteItem from './NoteItem'
 import AddNewScheduleItem from './AddNewScheduleItem'
 
-const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
+const ListOfItemsToEdit = ({ type, schedules, setSchedules, setUpdate, updateData }) => {
   const [addingNewItem, setAddingNewItem] = useState(false)
   const comments = [1]
 
-  const editSchedule = (itemEdited) => {
-    const allSchedules = [...schedules]
+  // TODO: Transformar a custom HOOK
 
-    const { id } = itemEdited
-    const index = allSchedules.findIndex(schedule => schedule.id === id)
-
-    allSchedules[index] = { ...schedules[index], ...itemEdited }
-    setSchedules(allSchedules)
+  const editSchedule = (id, itemEdited) => {
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`, itemEdited)
+      .then(res => setUpdate(!updateData))
   }
 
   const addNewSchedule = (newItem) => {
     axios.post(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, newItem)
+      .then(res => setUpdate(!updateData))
+  }
+
+  const deleteSchedule = (id) => {
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`)
+      .then(res => setUpdate(!updateData))
   }
 
   return (
     <div className='container' >
       <div>
         { type === 'schedule'
-          ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule}/>)
+          ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule} deleteSchedule={deleteSchedule} />)
           : comments.map(comment => <NoteItem key={2}/>)
         }
-        { addingNewItem && <AddNewScheduleItem visible={addingNewItem} setVisible={setAddingNewItem} addItem={addNewSchedule}/> }
+        { addingNewItem && <AddNewScheduleItem visible={addingNewItem} setVisible={setAddingNewItem} addItem={addNewSchedule} setUpdate={setUpdate} /> }
       </div>
 
-      <div className='addNewItemContainer' onClick={() => setAddingNewItem(true)} >
-        <FaPlusCircle size={25} />
-        <p>Añadir nuevo elemento</p>
-      </div>
+      {!addingNewItem && (
+        <div className='addNewItemContainer' onClick={() => setAddingNewItem(true)} >
+          <FaPlusCircle size={25} />
+          <p>Añadir nuevo elemento</p>
+        </div>
+      )}
 
       <style jsx>{`
         .container{
@@ -49,8 +54,9 @@ const ListOfItemsToEdit = ({ type, schedules, setSchedules }) => {
         .addNewItemContainer{
           display: flex;
           align-items: center;
-          width: 100%;
+          width: 35%;
           justify-content: center;
+          margin: 0 auto;
           margin-top: 10px;
           cursor: pointer;
         }

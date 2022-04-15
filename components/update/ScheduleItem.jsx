@@ -5,26 +5,34 @@ import { BsFillArrowRightSquareFill, BsFillCheckCircleFill } from 'react-icons/b
 import { FaEdit } from 'react-icons/fa'
 import { MdDeleteForever, MdCancel } from 'react-icons/md'
 
+import sanitizeObject from '../../utils/sanitizeObject'
+import objectPrepared from '../../utils/prepareObject'
+
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const ScheduleItem = ({ scheduleData, editSchedule }) => {
+const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
   const [isEditing, setIsEditing] = useState(false)
+
+  const { id } = scheduleData
+  const finalTime = scheduleData.finalTime ? scheduleData.finalTime.substr(0, 5) : ''
 
   const formik = useFormik({
     initialValues: {
       title: scheduleData.title,
       initialTime: scheduleData.initialTime.substr(0, 5),
-      finalTime: scheduleData.finalTime.substr(0, 5)
+      finalTime: finalTime
     },
     onSubmit: values => {
-      const { id } = scheduleData
       const itemEdited = {
-        id,
         title: values.title,
         initialTime: values.initialTime,
         finalTime: values.finalTime
       }
-      editSchedule(itemEdited)
+      const preparedObject = objectPrepared(itemEdited)
+      preparedObject.updatedBy = 'admin'
+      const safeObject = sanitizeObject(preparedObject)
+
+      editSchedule(id, safeObject)
       setIsEditing(false)
     }
   })
@@ -56,11 +64,11 @@ const ScheduleItem = ({ scheduleData, editSchedule }) => {
         <div className='container__data--schedule divisionInElement'>
           <h3>{scheduleData.initialTime.substr(0, 5) }</h3>
           <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
-          <h3 >{scheduleData.finalTime.substr(0, 5) }</h3>
+          <h3 >{finalTime}</h3>
         </div>
         <div className='container__data--options'>
           <FaEdit size={20} className={iconsStyles.divisionIcon} onClick={() => setIsEditing(true)} />
-          <MdDeleteForever size={20} className={iconsStyles.divisionIcon}/>
+          <MdDeleteForever size={20} className={iconsStyles.divisionIcon} onClick={() => deleteSchedule(id)}/>
         </div>
 
       </div>

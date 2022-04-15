@@ -3,23 +3,33 @@ import { useState, useEffect } from 'react'
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
 
-import schedulesData from './../../mocks/schedules.js'
+// import schedulesData from './../../mocks/schedules.js'
 import axios from 'axios'
 
 const EditDataContainer = () => {
   const [schedules, setSchedules] = useState([])
+  const [isUpdatingData, setIsUpdatingData] = useState(false)
 
   useEffect(() => {
     const data = axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
-      .then(res => setSchedules(res.data))
-  }, [])
+      .then(res => res.data.sort((a, b) => {
+        if (a.initialTime < b.initialTime) {
+          return -1
+        }
+        if (a.initialTime > b.initialTime) {
+          return 1
+        }
+        return 0
+      }))
+      .then(res => setSchedules(res))
+  }, [isUpdatingData])
 
   return (
     <>
       <section className="container">
         <h2 className="title">Actualizar Datos</h2>
         <h3>Horarios</h3>
-        <ListOfItemsToEdit type={'schedule'} schedules={schedules} setSchedules={setSchedules}/>
+        <ListOfItemsToEdit type={'schedule'} schedules={schedules} setSchedules={setSchedules} setUpdate={setIsUpdatingData} updateData={isUpdatingData}/>
         <h3>Notas</h3>
         <ListOfItemsToEdit type={'note'}/>
         <h3>Semana</h3>

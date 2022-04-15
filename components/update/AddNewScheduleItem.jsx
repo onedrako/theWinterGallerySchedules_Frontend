@@ -18,10 +18,10 @@ const AddNewScheduleItem = ({ setVisible, addItem }) => {
       finalTime: ''
     },
     onSubmit: values => {
-      const safeObject = sanitizeObject(values)
-      safeObject.updatedBy = 'admin'
-      const preparedObject = objectPrepared(safeObject)
-      addItem(preparedObject)
+      const preparedObject = objectPrepared(values)
+      preparedObject.updatedBy = 'admin'
+      const safeObject = sanitizeObject(preparedObject)
+      addItem(safeObject)
       setVisible(false)
     },
     validationSchema: Yup.object({
