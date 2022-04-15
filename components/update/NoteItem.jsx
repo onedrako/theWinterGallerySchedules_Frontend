@@ -6,16 +6,31 @@ import { BsFillCheckCircleFill } from 'react-icons/bs'
 import { FaEdit } from 'react-icons/fa'
 import { MdDeleteForever, MdCancel } from 'react-icons/md'
 
-const NoteItem = () => {
+import sanitizeObject from '../../utils/sanitizeObject'
+import objectPrepared from '../../utils/prepareObject'
+
+const NoteItem = ({ noteData, deleteNote, editNote }) => {
   const [isEditing, setIsEditing] = useState(false)
+
+  const { id } = noteData
+
+  const title = noteData.title || ''
+  const comment = noteData.comment || ''
 
   const formik = useFormik({
     initialValues: {
-      title: '',
-      comment: ''
+      title: title,
+      comment: comment
     },
     onSubmit: values => {
-      console.log(values)
+      const itemEdited = {
+        title: values.title,
+        comment: values.comment
+      }
+      const preparedObject = objectPrepared(itemEdited)
+      preparedObject.updatedBy = 'admin'
+      const safeObject = sanitizeObject(preparedObject)
+      editNote(id, safeObject)
       setIsEditing(false)
     }
   })
@@ -42,13 +57,13 @@ const NoteItem = () => {
         : (
       <div className='container'>
         <div className='container__data'>
-          <h3>DISCORD</h3>
+          <h3>{title}</h3>
           <div className='container__data--schedule divisionInElement'>
-            <p>Es es el texto ejemplo de una nota para el edwiouefhuwefuiwhf uwefujiwehf uiwefuief hwuiehfuiwf uiwhfuiwf huwfuiwhfueit</p>
+            <p>{comment}</p>
           </div>
           <div className='container__data--options'>
-          <FaEdit size={20} className={iconsStyles.divisionIcon} onClick={() => setIsEditing(true)} />
-            <MdDeleteForever size={20} className={iconsStyles.divisionIcon}/>
+            <FaEdit size={20} className={iconsStyles.divisionIcon} onClick={() => setIsEditing(true)} />
+            <MdDeleteForever size={20} className={iconsStyles.divisionIcon} onClick={() => deleteNote(id) } />
           </div>
         </div>
       </div>
