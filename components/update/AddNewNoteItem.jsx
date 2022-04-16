@@ -96,7 +96,7 @@ const AddNewScheduleItem = ({ setVisible, addItem }) => {
           padding: 5px;
         }
         .commentTextArea{
-          width: 280px;
+          width: 485px;
           height: 80px;
           border-radius: 10px;
           border: 1px solid #ccc;

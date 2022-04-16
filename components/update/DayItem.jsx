@@ -1,13 +1,23 @@
 import { useState } from 'react'
-import { MdOutlineNoteAdd, MdCancel, MdDeleteForever } from 'react-icons/md'
-import { FaRegCalendarPlus, FaEdit } from 'react-icons/fa'
-import { BsFillCheckCircleFill, BsFillCaretUpSquareFill, BsFillCaretDownSquareFill } from 'react-icons/bs'
 
-import iconsStyles from '../../styles/iconStyles.module.css'
+import SchedulesNotesItemInDays from './SchedulesNotesItemInDays'
+import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
-const DayItem = () => {
+import { MdOutlineNoteAdd } from 'react-icons/md'
+import { FaRegCalendarPlus } from 'react-icons/fa'
+
+import moment from 'moment-timezone'
+import 'moment/locale/es'
+
+import capitalize from './../../utils/capitalize'
+
+const DayItem = ({ day, notes, schedules }) => {
   const [isOnline, setIsOnline] = useState(true)
-  const [isAddingANewElement, setIsAddingANewElement] = useState(true)
+  const [isAddingANewElement, setIsAddingANewElement] = useState(false)
+  const [typeOfNewElement, setTypeOfNewElement] = useState('')
+
+  const { date } = day
+  const formatDate = capitalize(moment(date).locale('es').format('dddd, DD/MMMM'))
 
   return (
     <>
@@ -15,7 +25,7 @@ const DayItem = () => {
       <div className='daysUpdateForm__dayContainer'>
 
         <div className='daysUpdateForm__dayContainer--date'>
-          <h3>Lunes 12/02/22 </h3>
+          <h3>{formatDate}</h3>
           <input className='colorInput' type="color" />
         </div>
 
@@ -24,81 +34,44 @@ const DayItem = () => {
           <h4 className="offline" onClick={() => setIsOnline(false)} >Offline</h4>
         </div>
 
-        { isOnline &&
-        (
+        { isOnline && (
           <div className='daysUpdateForm__dayContainer--options' >
-          <div className="options__container">
-            <div className='addNewItemContainer' onClick={() => setIsAddingANewElement(true)} >
-              <FaRegCalendarPlus size={22} />
-              <p>Horarios</p>
-            </div>
+            <SchedulesNotesItemInDays />
 
-            <div className='addNewItemContainer' onClick={() => setIsAddingANewElement(true)} >
-              <MdOutlineNoteAdd size={25} />
-              <p>Notas</p>
-            </div>
-          </div>
+            {!isAddingANewElement && (
+              <div className="options__container">
+                <div className='addNewItemContainer' onClick={() => {
+                  setTypeOfNewElement('schedules')
+                  setIsAddingANewElement(true)
+                }} >
+                  <FaRegCalendarPlus size={22} />
+                  <p>Horarios</p>
+                </div>
+                <div className='addNewItemContainer' onClick={() => {
+                  setTypeOfNewElement('notes')
+                  setIsAddingANewElement(true)
+                }} >
+                  <MdOutlineNoteAdd size={25} />
+                  <p>Notas</p>
+                </div>
+              </div>
+            )}
 
-          <div className='chosenElements'>
-            <div className="chosenElements__upDownElement">
-              <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon}/>
-              <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon}/>
-            </div>
-            <div className="chosenElements__description">
-              <p>Mañana</p>
-              <div className="chosenElements__upDownElement">
-                <p>10:00</p>
-                <span> - </span>
-                <p>12:00</p>
-            </div>
-            </div>
-            <div className="chosenElements__upDownElement">
-            <FaEdit size={20} className={iconsStyles.icon} />
-            <MdDeleteForever size={20} className={iconsStyles.icon}/>
-            </div>
-          </div>
+            {isAddingANewElement && <AddUpdateNoteScheduleItems setIsAddingANewElement={setIsAddingANewElement} type={typeOfNewElement} notes={notes} schedules={schedules} />}
 
-          <div className='chosenElements'>
-            <div className="chosenElements__upDownElement">
-              <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon}/>
-              <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon}/>
-            </div>
-            <div className={'chosenElements__description'}>
-              <p>Discord</p>
-              <p>Este es yb ejeplo deeojfwhfwfkjh wieyhgbfwiyf weuihfgwe weyhfgbwuilehf wiufgbwlh wehifgbwile</p>
-            </div>
-            <div className="chosenElements__upDownElement">
-            <FaEdit size={20} className={iconsStyles.icon} />
-            <MdDeleteForever size={20} className={iconsStyles.icon}/>
-            </div>
           </div>
-
-          {
-            isAddingANewElement &&
-            <div className="addNewItem--schedule">
-            <select name="" id="">
-              <option value="">Horario 1</option>
-              <option value="">Nota 1</option>
-            </select>
-            <input className='colorInput' type="color" />
-            <BsFillCheckCircleFill size={20} className={iconsStyles.closeIcon} color="green" alt="Aceptar" />
-            <MdCancel size={23} className={iconsStyles.closeIcon} color="red" alt="Rechazar" onClick={() => setIsAddingANewElement(false)}/>
-          </div>
-          }
-        </div>
         )}
-
       </div>
     </form>
 
   <style jsx>{` 
     .daysUpdateForm{
-        width: 90%;
+        width: 100%;
         margin: 0 auto;
       } 
       .daysUpdateForm__dayContainer{
         border: 1px solid #ccc;
-        max-width: 30%;
+        max-width: 100%;
         padding: 10px;
       }
       .daysUpdateForm__dayContainer--date{
@@ -118,30 +91,6 @@ const DayItem = () => {
         flex-direction: column;
         align-items: center;
         margin: 10px 0; 
-      }
-
-      .chosenElements{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-top: 15px;
-        width: 90%;
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 10px;
-        gap: 10px;
-      }
-      .chosenElements__upDownElement{
-        display: flex;
-        gap: 5px;
-      }
-
-      .chosenElements__description{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
       }
 
       .online{
@@ -176,16 +125,9 @@ const DayItem = () => {
         gap: 5px;
         cursor: pointer;
         }
-      .addNewItem--schedule{
-        display: flex;
-        align-items: center;
-        margin : 10px 0;
-        gap: 15px;
-        width: 90%;
-      }
 
       p {
-        font-size: 1.5rem;
+        font-size: 1.6rem;
       }
       span {
         font-size: 1.5rem;
@@ -195,17 +137,6 @@ const DayItem = () => {
       margin-right: 15px;
       }
       h4{
-        font-size: 1.5rem;
-      }
-      select{
-        width: 225px;
-        height: 35px;
-        font-size: 1.5rem;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        justify-self: center;
-      }
-      option{
         font-size: 1.5rem;
       }
       .colorInput{

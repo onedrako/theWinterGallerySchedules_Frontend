@@ -108,7 +108,7 @@ const NoteItem = ({ noteData, deleteNote, editNote }) => {
       margin-right: 15px;
     }
     p{
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
     .titleInput{
       font-size: 1.6rem;
@@ -120,14 +120,13 @@ const NoteItem = ({ noteData, deleteNote, editNote }) => {
       padding: 10px;
     }
     .commentTextArea{
-      width: 280px;
+      width: 485px;
       height: 80px;
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 1.5rem;
       font-family: 'Roboto', sans-serif;
       padding: 10px;
-
     }
     `}</style>
   </>

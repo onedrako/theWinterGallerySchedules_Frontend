@@ -13,8 +13,11 @@ const EditDataContainer = () => {
   const [notes, setNotes] = useState([])
   const [isUpdatingNotes, setIsUpdatingNotes] = useState(false)
 
+  const [days, setDays] = useState([])
+  const [isUpdatingDays, setIsUpdatingDays] = useState(false)
+
   useEffect(() => {
-    const data = axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
       .then(res => res.data.sort((a, b) => {
         if (a.initialTime < b.initialTime) {
           return -1
@@ -28,10 +31,24 @@ const EditDataContainer = () => {
   }, [isUpdatingSchedules])
 
   useEffect(() => {
-    const data = axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notes`)
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notes`)
       .then(res => setNotes(res.data))
-    console.log(notes)
   }, [isUpdatingNotes])
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = []
+      const elements = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/days`).then(res => res.data)
+      const elementsWithDate = elements
+        .filter(element => element.date)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+      const elementsWithoutDate = elements.filter(element => !element.date)
+      data.push(...elementsWithDate)
+      data.push(...elementsWithoutDate)
+      setDays(data)
+    }
+    getData()
+  }, [isUpdatingDays])
 
   return (
     <>
@@ -43,12 +60,12 @@ const EditDataContainer = () => {
         <ListOfItemsToEdit type={'note'} notes={notes} setUpdate={setIsUpdatingNotes} updateData={isUpdatingNotes}/>
         <h3>Semana</h3>
       </section>
-      <ListOfDays/>
+      <ListOfDays days={days} schedules={schedules} notes={notes} />
 
       <style jsx>{`
             .container{
               padding: 25px;
-              max-width: 750px;
+              max-width: 1000px;
               margin: 0 auto;
             }
             .title{

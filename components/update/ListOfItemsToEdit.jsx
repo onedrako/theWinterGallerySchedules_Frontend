@@ -78,12 +78,12 @@ const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes }) =>
           width: 35%;
           justify-content: center;
           margin: 0 auto;
-          margin-top: 10px;
+          margin-top: 30px;
           cursor: pointer;
         }
         p{
           margin-left: 10px;
-          font-size: 1.4rem;
+          font-size: 1.6rem;
         }
       `}</style>
     </div>

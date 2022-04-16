@@ -44,7 +44,7 @@ const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
       <div className='container'>
         <form className='container__data' onSubmit={formik.handleSubmit}>
           <input className='titleInput' type="Text" {...formik.getFieldProps('title')} />
-          <div className='container__data--schedule divisionInElement'>
+          <div className='container__data--scheduleEdit divisionInElement'>
             <input className='timeInput' type="time" {...formik.getFieldProps('initialTime')} />
             <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
             <input className='timeInput' type="time" {...formik.getFieldProps('finalTime')} />
@@ -60,7 +60,7 @@ const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
       : (
       <div className='container'>
       <div className='container__data'>
-        <h3>{scheduleData.title}</h3>
+        <h3 className='container__data--title' >{scheduleData.title}</h3>
         <div className='container__data--schedule divisionInElement'>
           <h3>{scheduleData.initialTime.substr(0, 5) }</h3>
           <BsFillArrowRightSquareFill size={20} className='container__data__icon'/>
@@ -89,24 +89,33 @@ const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
           justify-content: space-between;
           width: 100%;
         }
-        .container__data--schedule{
+
+        .container__data--title{
           display: flex;
           align-items: center;
           justify-content: space-around;
-          width: 70%;
+          width: 50%;
         }
 
-        .container__data--options{
+        .container__data--schedule{
           display: flex;
           align-items: center;
           justify-content: space-around;
           width: 30%;
         }
 
+        .container__data--options{
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          width: 20%;
+        }
+
         .divisionInElement{
           border-right: 1px solid #ccc;
           border-left: 1px solid #ccc;
           padding: 0 10px;
+          width: 200px;
         }
 
         h3{
@@ -117,10 +126,17 @@ const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
         p{
           font-size: 1.2rem;
         }
+
+        .container__data--scheduleEdit{
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+          width: 50%;
+        }
         
         .titleInput{
           font-size: 1.6rem;
-          width: 125px;
+          width: 40%;
           height: 35px;
           margin-right: 15px;
           border-radius: 10px;

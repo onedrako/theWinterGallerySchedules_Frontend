@@ -2,8 +2,9 @@ import { useState } from 'react'
 import parseDates from '../../utils/parseDates'
 import DayItem from './DayItem'
 
-const ListOfDays = () => {
-  const [days, setDays] = useState([])
+const ListOfDays = ({ days, notes, schedules }) => {
+  console.log(days)
+  const [week, setWeek] = useState([])
   const [scheduleData, setScheduleData] = useState([{
     monday: {},
     tuesday: {},
@@ -23,7 +24,7 @@ const ListOfDays = () => {
           onChange={e => {
             const selectedWeek = e.target.value
             const dates = parseDates(selectedWeek)
-            setDays(dates)
+            setWeek(dates)
           }} />
       </div>
 
@@ -37,9 +38,9 @@ const ListOfDays = () => {
       </div>
     </div>
 
-    { days && (
-      <DayItem/>
-    )}
+    <div className='daysContainer'>
+      { days && (days.map(day => <DayItem key={`day-${day.id}`} notes={notes} schedules={schedules} day={day}/>)) }
+    </div>
 
     <style jsx>{` 
       .weekInput{
@@ -62,15 +63,22 @@ const ListOfDays = () => {
       .colorInput{
         width: 25px;
       }
+
+      .daysContainer{
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        padding: 25px;
+        gap: 25px;
+      }
+
       p {
         font-size: 1.5rem;
       }
+
       h3{
       font-size: 2rem;
       margin-right: 15px;
       }
-
-
     }`}</style>
 
     </>
