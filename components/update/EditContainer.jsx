@@ -60,7 +60,7 @@ const EditDataContainer = () => {
         <ListOfItemsToEdit type={'note'} notes={notes} setUpdate={setIsUpdatingNotes} updateData={isUpdatingNotes}/>
         <h3>Semana</h3>
       </section>
-      <ListOfDays days={days} schedules={schedules} notes={notes} />
+      <ListOfDays days={days} schedules={schedules} notes={notes} setUpdate={setIsUpdatingDays} updateData={isUpdatingDays} setUpdateData={setIsUpdatingDays} />
 
       <style jsx>{`
             .container{

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import parseDates from '../../utils/parseDates'
 import DayItem from './DayItem'
 
-const ListOfDays = ({ days, notes, schedules }) => {
+const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
   console.log(days)
   const [week, setWeek] = useState([])
   const [scheduleData, setScheduleData] = useState([{
@@ -39,7 +39,7 @@ const ListOfDays = ({ days, notes, schedules }) => {
     </div>
 
     <div className='daysContainer'>
-      { days && (days.map(day => <DayItem key={`day-${day.id}`} notes={notes} schedules={schedules} day={day}/>)) }
+      { days && (days.map(day => <DayItem key={`day-${day.id}`} notes={notes} schedules={schedules} day={day} setUpdate={setUpdateData} updateData={updateData} />)) }
     </div>
 
     <style jsx>{` 
