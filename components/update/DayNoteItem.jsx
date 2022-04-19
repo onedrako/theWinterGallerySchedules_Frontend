@@ -12,10 +12,11 @@ import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData }) => {
+const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData, listOfSchedules }) => {
   const [isEditing, setIsEditing] = useState(false)
   const noteData = note.note[0]
   const { id } = note
+  const order = note.order
 
   const editRelation = (type, data) => {
     data.dayId = dayId
@@ -35,8 +36,16 @@ const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData }) => {
     {!isEditing
       ? <div className='chosenElements'>
     <div className="chosenElements__upDownElement">
-      <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('subir lugar')}/>
-      <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('bajar posición')} />
+      <BsFillCaretUpSquareFill
+        size={20}
+        className={iconsStyles.icon}
+        // display={order === 1 ? 'none' : 'block'}
+        onClick={() => console.log('subir lugar')}/>
+      <BsFillCaretDownSquareFill
+        size={20}
+        className={iconsStyles.icon}
+        // display={order === listOfSchedules.length ? 'none' : 'block'}
+        onClick={() => console.log('bajar posición')} />
     </div>
     <div className={'chosenElements__description'}>
       <p>{noteData.title}</p>

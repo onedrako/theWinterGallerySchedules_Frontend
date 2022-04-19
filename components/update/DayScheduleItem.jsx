@@ -12,10 +12,11 @@ import sanitizeObject from '../../utils/sanitizeObject'
 
 import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
-const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateData, schedules }) => {
+const DayScheduleItem = ({ schedule, listOfItems, dayId, setUpdate, updateData, schedules, setNewOrder }) => {
   const [isEditing, setIsEditing] = useState(false)
   const scheduleData = schedule.schedule[0]
   const { id } = schedule
+  const order = schedule?.order
 
   const editRelation = (type, data) => {
     data.dayId = dayId
@@ -30,13 +31,44 @@ const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateDa
       .then(() => setUpdate(!updateData))
   }
 
+  const changeOrder = (id, type) => {
+    const listOfItemsCopy = [...listOfItems]
+
+    const actualItem = listOfItemsCopy.find(item => item.id === id)
+    const actualItemIndex = listOfItemsCopy.findIndex(item => item.id === id)
+    const previousItemIndex = listOfItemsCopy.findIndex(item => item.order === actualItem.order - 1)
+    const nextItemIndex = listOfItemsCopy.findIndex(item => item.order === actualItem.order + 1)
+
+    if (type === 'up') {
+      listOfItemsCopy[actualItemIndex].order = listOfItemsCopy[actualItemIndex].order - 1
+      listOfItemsCopy[previousItemIndex].order = listOfItemsCopy[previousItemIndex].order + 1
+    }
+    if (type === 'down') {
+      listOfItemsCopy[actualItemIndex].order = listOfItemsCopy[actualItemIndex].order + 1
+      listOfItemsCopy[nextItemIndex].order = listOfItemsCopy[nextItemIndex].order - 1
+    }
+
+    const listOfItemsOrdered = listOfItemsCopy.sort((a, b) => a.order - b.order)
+    setNewOrder(listOfItemsOrdered)
+  }
+
   return (
     <>
     {!isEditing
       ? <div className='chosenElements'>
       <div className="chosenElements__upDownElement">
-        <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log(listOfSchedules)}/>
-        <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('bajar lugar')}/>
+
+        <BsFillCaretUpSquareFill
+          size={20}
+          className={iconsStyles.icon}
+          display={order === 1 ? 'none' : 'block'}
+          onClick={() => changeOrder(id, 'up')}/>
+        <BsFillCaretDownSquareFill
+          size={20}
+          className={iconsStyles.icon}
+          display={order === listOfItems.length ? 'none' : 'block'}
+          onClick={() => changeOrder(id, 'down')}/>
+
       </div>
       <div className="chosenElements__description">
         <p>{scheduleData.title}</p>

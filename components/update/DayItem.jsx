@@ -89,7 +89,15 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         { isOnline && (
           <div className='daysUpdateForm__dayContainer--options' >
 
-            <SchedulesNotesItemInDays listOfItems={listOfSchedulesNotes} dayId={dayId} schedules={schedules} notes={notes} setUpdate={setUpdateList} updateData={updateList}/>
+            <SchedulesNotesItemInDays
+              listOfItems={listOfSchedulesNotes}
+              dayId={dayId}
+              schedules={schedules}
+              notes={notes}
+              setUpdate={setUpdateList}
+              updateData={updateList}
+              setNewOrder={setListOfSchedulesNotes}
+            />
 
             {!isAddingANewElement && (
               <div className="options__container">
