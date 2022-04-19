@@ -6,7 +6,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, schedules, createNewRelation }) => {
+const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, schedules, action }) => {
   const formik = useFormik({
     initialValues: {
       option: '',
@@ -18,6 +18,8 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
     onSubmit: values => {
       const type = values.option.substring(0, 1)
       const id = parseInt(values.option.substring(2))
+      let relationId
+      console.log(values)
 
       if (type === 's') {
         if (values.generalColor !== '') {
@@ -29,7 +31,7 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
           titleColor: values.titleColor,
           timeColor: values.timeColor
         }
-        createNewRelation('schedule', data)
+        action('schedule', data, relationId)
         setIsAddingANewElement(false)
       } else if (type === 'n') {
         if (values.generalColor !== '') {
@@ -41,7 +43,7 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
           titleColor: values.titleColor,
           commentColor: values.commentColor
         }
-        createNewRelation('n', data)
+        action('n', data)
         setIsAddingANewElement(false)
       }
     }
@@ -54,7 +56,6 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
       <select {...formik.getFieldProps('option')} >
         <option value="">Selecciona una opción</option>
         {type === 'schedules'
-
           ? schedules.map(schedule => (
           <option value={`s-${schedule.id}`} key={`scheduleElement-${schedule.id}`} >
             {`${schedule.title && schedule.title}: ${schedule.initialTime !== null ? schedule.initialTime.substr(0, 5) : ''} ${schedule.finalTime !== null ? `- ${schedule.finalTime.substr(0, 5)}` : ''}`}

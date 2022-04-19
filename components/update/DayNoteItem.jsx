@@ -6,18 +6,18 @@ import { BsFillCaretUpSquareFill, BsFillCaretDownSquareFill } from 'react-icons/
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const DayNoteItem = ({ note }) => {
+const DayNoteItem = ({ note, notes }) => {
+  const noteData = note.note[0]
   return (
     <>
-
     <div className='chosenElements'>
       <div className="chosenElements__upDownElement">
         <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon}/>
         <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon}/>
       </div>
       <div className={'chosenElements__description'}>
-        <p>{note.title}</p>
-        <p>{note.comment}</p>
+        <p>{noteData.title}</p>
+        <p>{noteData.comment}</p>
       </div>
       <div className="chosenElements__upDownElement">
       <FaEdit size={20} className={iconsStyles.icon} />

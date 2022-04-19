@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import SchedulesNotesItemInDays from './SchedulesNotesItemInDays'
@@ -20,7 +20,8 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
 
-  console.log(day)
+  const [listOfSchedulesNotes, setListOfSchedulesNotes] = useState([])
+  const [updateList, setUpdateList] = useState(false)
 
   const dayId = day.id
 
@@ -31,20 +32,36 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
       axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeObject)
-        .then(res => setUpdate(!updateData))
+        .then(() => setUpdate(!updateData))
+        .then(() => setUpdateList(!updateList))
     } else if (type === 'n') {
       data.dayId = dayId
       data.order = null
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
-      console.log(safeObject)
       axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeObject)
-        .then(res => setUpdate(!updateData))
+        .then(() => setUpdate(!updateData))
+        .then(() => setUpdateList(!updateList))
     }
   }
 
   const { date } = day
   const formatDate = capitalize(moment(date).locale('es').format('dddd, DD/MMMM'))
+
+  useEffect(() => {
+    const getData = async () => {
+      let listOfElementsInDay = []
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${dayId}`)
+        .then(res => listOfElementsInDay = [...listOfElementsInDay, ...res.data]) //eslint-disable-line
+
+      await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${dayId}`)
+        .then(res => listOfElementsInDay = [...listOfElementsInDay, ...res.data]) //eslint-disable-line
+
+      listOfElementsInDay.sort((a, b) => a.order - b.order)
+      setListOfSchedulesNotes(listOfElementsInDay)
+    }
+    getData()
+  }, [updateList])
 
   return (
     <>
@@ -63,7 +80,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
         { isOnline && (
           <div className='daysUpdateForm__dayContainer--options' >
-            <SchedulesNotesItemInDays schedules={day.schedules} notes={day.notes}/>
+            <SchedulesNotesItemInDays listOfItems={listOfSchedulesNotes} dayId={dayId} schedules={schedules} notes={notes} setUpdate={setUpdateList} updateData={updateList}/>
 
             {!isAddingANewElement && (
               <div className="options__container">
@@ -84,7 +101,15 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
               </div>
             )}
 
-            {isAddingANewElement && <AddUpdateNoteScheduleItems setIsAddingANewElement={setIsAddingANewElement} type={typeOfNewElement} notes={notes} schedules={schedules} createNewRelation={createNewRelation}/>}
+            {isAddingANewElement &&
+              <AddUpdateNoteScheduleItems
+                setIsAddingANewElement={setIsAddingANewElement}
+                type={typeOfNewElement}
+                notes={notes}
+                schedules={schedules}
+                action={createNewRelation}
+                setUpdate={setUpdate}
+              />}
 
           </div>
         )}
