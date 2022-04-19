@@ -13,10 +13,9 @@ import sanitizeObject from '../../utils/sanitizeObject'
 import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
 const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateData, schedules }) => {
-  const scheduleData = schedule.schedule[0]
   const [isEditing, setIsEditing] = useState(false)
+  const scheduleData = schedule.schedule[0]
   const { id } = schedule
-  console.log(schedules)
 
   const editRelation = (type, data) => {
     data.dayId = dayId
@@ -28,8 +27,6 @@ const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateDa
   }
 
   const deleteRelation = (id) => {
-    console.log('ejecutando')
-
     axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`)
       .then(() => setUpdate(!updateData))
   }
