@@ -12,7 +12,17 @@ import sanitizeObject from '../../utils/sanitizeObject'
 
 import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
-const DayScheduleItem = ({ schedule, listOfItems, dayId, setUpdate, updateData, schedules, setNewOrder }) => {
+const DayScheduleItem = ({
+  schedule,
+  listOfItems,
+  dayId,
+  setUpdate,
+  updateData,
+  schedules,
+  setNewOrder,
+  setIsChangingOrder,
+  isChangingOrder
+}) => {
   const [isEditing, setIsEditing] = useState(false)
   const scheduleData = schedule.schedule[0]
   const { id } = schedule
@@ -32,6 +42,7 @@ const DayScheduleItem = ({ schedule, listOfItems, dayId, setUpdate, updateData, 
   }
 
   const changeOrder = (id, type) => {
+    setIsChangingOrder(true)
     const listOfItemsCopy = [...listOfItems]
 
     const actualItem = listOfItemsCopy.find(item => item.id === id)
@@ -82,10 +93,12 @@ const DayScheduleItem = ({ schedule, listOfItems, dayId, setUpdate, updateData, 
           }
         </div>
       </div>
+      {!isChangingOrder &&
       <div className="chosenElements__upDownElement">
         <FaEdit size={20} className={iconsStyles.icon} onClick={() => setIsEditing(true)} />
         <MdDeleteForever size={20} className={iconsStyles.icon} onClick={() => deleteRelation(id)}/>
       </div>
+      }
     </div>
       : <AddUpdateNoteScheduleItems schedules={schedules} setIsAddingANewElement={setIsEditing} type="schedules" action={editRelation}/>
   }
@@ -99,7 +112,7 @@ const DayScheduleItem = ({ schedule, listOfItems, dayId, setUpdate, updateData, 
         width: 90%;
         border: 1px solid #ccc;
         border-radius: 10px;
-        padding: 10px;
+        padding: 15px;
         gap: 10px;
       }
       .chosenElements__upDownElement{

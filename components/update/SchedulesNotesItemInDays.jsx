@@ -1,7 +1,17 @@
 import DayScheduleItem from './DayScheduleItem'
 import DayNoteItem from './DayNoteItem'
 
-const SchedulesNotesItemInDays = ({ listOfItems, dayId, setUpdate, updateData, schedules, notes, setNewOrder }) => {
+const SchedulesNotesItemInDays = ({
+  listOfItems,
+  dayId,
+  setUpdate,
+  updateData,
+  schedules,
+  notes,
+  setNewOrder,
+  setIsChangingOrder,
+  isChangingOrder
+}) => {
   return (
   <>
     {listOfItems.map(item =>
@@ -15,16 +25,20 @@ const SchedulesNotesItemInDays = ({ listOfItems, dayId, setUpdate, updateData, s
           updateData={updateData}
           schedules={schedules}
           setNewOrder={setNewOrder}
+          setIsChangingOrder={setIsChangingOrder}
+          isChangingOrder={isChangingOrder}
           />
         : <DayNoteItem
           key={`dayNote-${item.id}`}
           note={item}
-          listOfNotes={listOfItems.filter(item => item.note)}
+          listOfItems={listOfItems}
           dayId={dayId}
           setUpdate={setUpdate}
           updateData={updateData}
           notes={notes}
           setNewOrder={setNewOrder}
+          setIsChangingOrder={setIsChangingOrder}
+          isChangingOrder={isChangingOrder}
           />
     )}
   </>

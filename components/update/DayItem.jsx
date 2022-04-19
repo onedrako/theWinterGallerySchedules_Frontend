@@ -12,7 +12,7 @@ import 'moment/locale/es'
 
 import capitalize from './../../utils/capitalize'
 
-import sanitizeObject from '../../utils/sanitizeObject'
+import sanitizeObject, { safeHTMLObject } from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
 const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
@@ -26,7 +26,36 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
   const [updateList, setUpdateList] = useState(false)
   const [countOfItemsInDays, setCountOfItemsInDays] = useState(0)
 
+  const [isChangingOrder, setIsChangingOrder] = useState(false)
+
   const dayId = day.id
+
+  const saveNewOrder = (data) => {
+    const listOfNotes = { listOfDaysNotes: [] }
+    const listOfSchedules = { listOfDaysSchedules: [] }
+
+    const dataForNotes = data.filter(item => item.noteId)
+    dataForNotes.map(item => {
+      const id = item.id
+      const order = item.order
+      listOfNotes.listOfDaysNotes.push({ id, order })
+    })
+
+    const dataForSchedules = data.filter(item => item.scheduleId)
+    dataForSchedules.map(item => {
+      const id = item.id
+      const order = item.order
+      listOfSchedules.listOfDaysSchedules.push({ id, order })
+    })
+
+    const safeDataForNotes = safeHTMLObject(listOfNotes)
+    const safeDataForSchedules = safeHTMLObject(listOfSchedules)
+
+    console.log(safeDataForNotes)
+    console.log(safeDataForSchedules)
+
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, { safeDataForNotes })
+  }
 
   const createNewRelation = (type, data) => {
     if (type === 'schedule') {
@@ -66,7 +95,6 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
       setListOfSchedulesNotes(listOfElementsInDay)
 
       setCountOfItemsInDays(listOfElementsInDay.length)
-      console.log(countOfItemsInDays)
     }
     getData()
   }, [updateList])
@@ -97,9 +125,11 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
               setUpdate={setUpdateList}
               updateData={updateList}
               setNewOrder={setListOfSchedulesNotes}
+              setIsChangingOrder={setIsChangingOrder}
+              isChangingOrder={isChangingOrder}
             />
 
-            {!isAddingANewElement && (
+            {(!isAddingANewElement && !isChangingOrder) && (
               <div className="options__container">
                 <div className='addNewItemContainer' onClick={() => {
                   setTypeOfNewElement('schedules')
@@ -130,9 +160,15 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
                 setCount={setCountOfItemsInDays}
               />}
 
-            <button className="daysUpdateForm__dayContainer--sendChangesButton" >
-              Guardar Cambios
-            </button>
+            {
+              isChangingOrder &&
+                <button
+                  type="button"
+                  className="daysUpdateForm__dayContainer--sendChangesButton"
+                  onClick={() => saveNewOrder([...listOfSchedulesNotes])} >
+                    Guardar Cambios
+                </button>
+            }
 
           </div>
         )}

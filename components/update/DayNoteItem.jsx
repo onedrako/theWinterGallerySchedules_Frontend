@@ -12,11 +12,21 @@ import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData, listOfSchedules }) => {
+const DayNoteItem = ({
+  note,
+  notes,
+  dayId,
+  setUpdate,
+  updateData,
+  listOfItems,
+  setNewOrder,
+  setIsChangingOrder,
+  isChangingOrder
+}) => {
   const [isEditing, setIsEditing] = useState(false)
   const noteData = note.note[0]
   const { id } = note
-  const order = note.order
+  const order = note?.order
 
   const editRelation = (type, data) => {
     data.dayId = dayId
@@ -30,6 +40,29 @@ const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData, listOfSchedule
     axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`)
       .then(() => setUpdate(!updateData))
   }
+
+  const changeOrder = (id, type) => {
+    setIsChangingOrder(true)
+    const listOfItemsCopy = [...listOfItems]
+
+    const actualItem = listOfItemsCopy.find(item => item.id === id)
+    const actualItemIndex = listOfItemsCopy.findIndex(item => item.id === id)
+    const previousItemIndex = listOfItemsCopy.findIndex(item => item.order === actualItem.order - 1)
+    const nextItemIndex = listOfItemsCopy.findIndex(item => item.order === actualItem.order + 1)
+
+    if (type === 'up') {
+      listOfItemsCopy[actualItemIndex].order = listOfItemsCopy[actualItemIndex].order - 1
+      listOfItemsCopy[previousItemIndex].order = listOfItemsCopy[previousItemIndex].order + 1
+    }
+    if (type === 'down') {
+      listOfItemsCopy[actualItemIndex].order = listOfItemsCopy[actualItemIndex].order + 1
+      listOfItemsCopy[nextItemIndex].order = listOfItemsCopy[nextItemIndex].order - 1
+    }
+
+    const listOfItemsOrdered = listOfItemsCopy.sort((a, b) => a.order - b.order)
+    setNewOrder(listOfItemsOrdered)
+  }
+
   return (
     <>
 
@@ -39,22 +72,27 @@ const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData, listOfSchedule
       <BsFillCaretUpSquareFill
         size={20}
         className={iconsStyles.icon}
-        // display={order === 1 ? 'none' : 'block'}
-        onClick={() => console.log('subir lugar')}/>
+        display={order === 1 ? 'none' : 'block'}
+        onClick={() => changeOrder(id, 'up')}
+      />
+
       <BsFillCaretDownSquareFill
         size={20}
         className={iconsStyles.icon}
-        // display={order === listOfSchedules.length ? 'none' : 'block'}
-        onClick={() => console.log('bajar posición')} />
+        display={order === listOfItems.length ? 'none' : 'block'}
+        onClick={() => changeOrder(id, 'down')}
+      />
     </div>
     <div className={'chosenElements__description'}>
       <p>{noteData.title}</p>
       <p>{noteData.comment}</p>
     </div>
-    <div className="chosenElements__upDownElement">
-    <FaEdit size={20} className={iconsStyles.icon} onClick={() => setIsEditing(true)} />
-    <MdDeleteForever size={20} className={iconsStyles.icon} onClick={() => deleteRelation(id)} />
-    </div>
+    {!isChangingOrder &&
+      <div className="chosenElements__upDownElement">
+      <FaEdit size={20} className={iconsStyles.icon} onClick={() => setIsEditing(true)} />
+      <MdDeleteForever size={20} className={iconsStyles.icon} onClick={() => deleteRelation(id)} />
+      </div>
+    }
   </div>
       : <AddUpdateNoteScheduleItems notes={notes} setIsAddingANewElement={setIsEditing} type="notes" action={editRelation}/>
   }
