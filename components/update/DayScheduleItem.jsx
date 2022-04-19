@@ -19,7 +19,6 @@ const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateDa
 
   const editRelation = (type, data) => {
     data.dayId = dayId
-    data.order = null
     const preparedObject = objectPrepared(data)
     const safeObject = sanitizeObject(preparedObject)
     axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`, safeObject)
@@ -36,8 +35,8 @@ const DayScheduleItem = ({ schedule, listOfSchedules, dayId, setUpdate, updateDa
     {!isEditing
       ? <div className='chosenElements'>
       <div className="chosenElements__upDownElement">
-        <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon}/>
-        <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon}/>
+        <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log(listOfSchedules)}/>
+        <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('bajar lugar')}/>
       </div>
       <div className="chosenElements__description">
         <p>{scheduleData.title}</p>

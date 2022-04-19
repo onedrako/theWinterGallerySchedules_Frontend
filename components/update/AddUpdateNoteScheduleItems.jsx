@@ -6,7 +6,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, schedules, action }) => {
+const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, schedules, action, count, setCount }) => {
   const formik = useFormik({
     initialValues: {
       option: '',
@@ -19,6 +19,7 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
       const type = values.option.substring(0, 1)
       const id = parseInt(values.option.substring(2))
       let relationId
+      console.log(values)
 
       if (type === 's') {
         if (values.generalColor !== '') {
@@ -89,6 +90,7 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
         <p>Regresar</p>
         <MdCancel size={23} className={iconsStyles.closeIcon} color="red" alt="Rechazar" onClick={() => setIsAddingANewElement(false)}/>
       </div>
+
     </div>
 
     <style jsx>{`

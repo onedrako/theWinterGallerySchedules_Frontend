@@ -19,7 +19,6 @@ const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData }) => {
 
   const editRelation = (type, data) => {
     data.dayId = dayId
-    data.order = null
     const preparedObject = objectPrepared(data)
     const safeObject = sanitizeObject(preparedObject)
     axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`, safeObject)
@@ -36,8 +35,8 @@ const DayNoteItem = ({ note, notes, dayId, setUpdate, updateData }) => {
     {!isEditing
       ? <div className='chosenElements'>
     <div className="chosenElements__upDownElement">
-      <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon}/>
-      <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon}/>
+      <BsFillCaretUpSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('subir lugar')}/>
+      <BsFillCaretDownSquareFill size={20} className={iconsStyles.icon} onClick={() => console.log('bajar posición')} />
     </div>
     <div className={'chosenElements__description'}>
       <p>{noteData.title}</p>

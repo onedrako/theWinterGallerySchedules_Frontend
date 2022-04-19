@@ -17,18 +17,22 @@ import objectPrepared from '../../utils/prepareObject'
 
 const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
   const [isOnline, setIsOnline] = useState(true)
+
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
+
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
 
   const [listOfSchedulesNotes, setListOfSchedulesNotes] = useState([])
   const [updateList, setUpdateList] = useState(false)
+  const [countOfItemsInDays, setCountOfItemsInDays] = useState(0)
 
   const dayId = day.id
 
   const createNewRelation = (type, data) => {
     if (type === 'schedule') {
       data.dayId = dayId
-      data.order = null
+      data.order = countOfItemsInDays + 1
+      setCountOfItemsInDays(countOfItemsInDays + 1)
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
       axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeObject)
@@ -36,7 +40,8 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         .then(() => setUpdateList(!updateList))
     } else if (type === 'n') {
       data.dayId = dayId
-      data.order = null
+      data.order = countOfItemsInDays + 1
+      setCountOfItemsInDays(countOfItemsInDays + 1)
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
       axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeObject)
@@ -59,6 +64,9 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
       listOfElementsInDay.sort((a, b) => a.order - b.order)
       setListOfSchedulesNotes(listOfElementsInDay)
+
+      setCountOfItemsInDays(listOfElementsInDay.length)
+      console.log(countOfItemsInDays)
     }
     getData()
   }, [updateList])
@@ -80,6 +88,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
         { isOnline && (
           <div className='daysUpdateForm__dayContainer--options' >
+
             <SchedulesNotesItemInDays listOfItems={listOfSchedulesNotes} dayId={dayId} schedules={schedules} notes={notes} setUpdate={setUpdateList} updateData={updateList}/>
 
             {!isAddingANewElement && (
@@ -109,7 +118,13 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
                 schedules={schedules}
                 action={createNewRelation}
                 setUpdate={setUpdate}
+                count={countOfItemsInDays}
+                setCount={setCountOfItemsInDays}
               />}
+
+            <button className="daysUpdateForm__dayContainer--sendChangesButton" >
+              Guardar Cambios
+            </button>
 
           </div>
         )}
@@ -177,7 +192,16 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         gap: 5px;
         cursor: pointer;
         }
-
+      .daysUpdateForm__dayContainer--sendChangesButton{
+        font-size: 1.5rem;
+        margin-top: 15px;
+        width: 150px;
+        height: 40px; 
+        border:  none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+      
       p {
         font-size: 1.6rem;
       }
