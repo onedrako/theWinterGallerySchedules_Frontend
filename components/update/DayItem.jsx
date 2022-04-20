@@ -38,14 +38,18 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
     dataForNotes.map(item => {
       const id = item.id
       const order = item.order
-      listOfNotes.listOfDaysNotes.push({ id, order })
+      const dayId = item.dayId
+      const noteId = item.noteId
+      listOfNotes.listOfDaysNotes.push({ id, order, dayId, noteId })
     })
 
     const dataForSchedules = data.filter(item => item.scheduleId)
     dataForSchedules.map(item => {
       const id = item.id
       const order = item.order
-      listOfSchedules.listOfDaysSchedules.push({ id, order })
+      const dayId = item.dayId
+      const scheduleId = item.scheduleId
+      listOfSchedules.listOfDaysSchedules.push({ id, order, dayId, scheduleId })
     })
 
     const safeDataForNotes = safeHTMLObject(listOfNotes)
@@ -54,7 +58,10 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
     console.log(safeDataForNotes)
     console.log(safeDataForSchedules)
 
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, { safeDataForNotes })
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeDataForSchedules)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeDataForNotes)
+
+    setIsChangingOrder(false)
   }
 
   const createNewRelation = (type, data) => {
@@ -80,7 +87,12 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
   }
 
   const { date } = day
-  const formatDate = capitalize(moment(date).locale('es').format('dddd, DD/MMMM'))
+  let formatDate
+  if (date) {
+    formatDate = capitalize(moment(date).locale('es').format('dddd, DD/MMMM'))
+  } else {
+    formatDate = 'NOTAS'
+  }
 
   useEffect(() => {
     const getData = async () => {
