@@ -16,17 +16,19 @@ import sanitizeObject, { safeHTMLObject } from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
 const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
-  const [isOnline, setIsOnline] = useState(true)
-
+  // TO ADD A NEW ITEM TO THE DAY
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
-
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
 
+  // TO MANAGE THE LIST OF ACTUAL ELEMENTS
   const [listOfSchedulesNotes, setListOfSchedulesNotes] = useState([])
   const [updateList, setUpdateList] = useState(false)
   const [countOfItemsInDays, setCountOfItemsInDays] = useState(0)
-
   const [isChangingOrder, setIsChangingOrder] = useState(false)
+
+  // FOR BUTTON ONLINE-OFFLINE
+  const [isOnline, setIsOnline] = useState(false)
+  const [isTurningOffline, setIsTurningOffline] = useState(false)
 
   const dayId = day.id
 
@@ -35,7 +37,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
     const listOfSchedules = { listOfDaysSchedules: [] }
 
     const dataForNotes = data.filter(item => item.noteId)
-    dataForNotes.map(item => {
+    dataForNotes.forEach(item => {
       const id = item.id
       const order = item.order
       const dayId = item.dayId
@@ -44,7 +46,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
     })
 
     const dataForSchedules = data.filter(item => item.scheduleId)
-    dataForSchedules.map(item => {
+    dataForSchedules.forEach(item => {
       const id = item.id
       const order = item.order
       const dayId = item.dayId
@@ -54,9 +56,6 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
     const safeDataForNotes = safeHTMLObject(listOfNotes)
     const safeDataForSchedules = safeHTMLObject(listOfSchedules)
-
-    console.log(safeDataForNotes)
-    console.log(safeDataForSchedules)
 
     axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeDataForSchedules)
     axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeDataForNotes)
@@ -86,6 +85,13 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
     }
   }
 
+  const deleteAllRelationsPuttingOfflineState = () => {
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/day/${dayId}`)
+      .then(axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/day/${dayId}`))
+      .then(setUpdateList(!updateList))
+      .then(setIsTurningOffline(false))
+  }
+
   const { date } = day
   let formatDate
   if (date) {
@@ -104,6 +110,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         .then(res => listOfElementsInDay = [...listOfElementsInDay, ...res.data]) //eslint-disable-line
 
       listOfElementsInDay.sort((a, b) => a.order - b.order)
+      listOfElementsInDay.length > 0 ? setIsOnline(true) : setIsOnline(false)
       setListOfSchedulesNotes(listOfElementsInDay)
 
       setCountOfItemsInDays(listOfElementsInDay.length)
@@ -122,8 +129,16 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         </div>
 
         <div className='daysUpdateForm__dayContainer--status'>
-          <h4 className="online" onClick={() => setIsOnline(true) }>Online</h4>
-          <h4 className="offline" onClick={() => setIsOnline(false)} >Offline</h4>
+          <h4 className="online" onClick={() => {
+            setIsOnline(true)
+            setIsTurningOffline(false)
+          }
+            }>Online</h4>
+          <h4 className="offline" onClick={() => {
+            setIsOnline(false)
+            setIsTurningOffline(true)
+          }
+            } >Offline</h4>
         </div>
 
         { isOnline && (
@@ -184,6 +199,15 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
           </div>
         )}
+      {
+        (isTurningOffline && countOfItemsInDays > 0) &&
+          <button
+            type="button"
+            className="daysUpdateForm__dayContainer--sendChangesButton"
+            onClick={() => deleteAllRelationsPuttingOfflineState()} >
+              Guardar Cambios
+          </button>
+      }
       </div>
     </form>
 
@@ -196,6 +220,9 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
         border: 1px solid #ccc;
         max-width: 100%;
         padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
       .daysUpdateForm__dayContainer--date{
         display: flex;
