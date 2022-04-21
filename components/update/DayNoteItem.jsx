@@ -108,6 +108,7 @@ const DayNoteItem = ({
         border-radius: 10px;
         padding: 10px;
         gap: 10px;
+        width: 325px;
       }
       .chosenElements__upDownElement{
         display: flex;

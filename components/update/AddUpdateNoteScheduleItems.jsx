@@ -19,7 +19,6 @@ const AddUpdateNoteScheduleItems = ({ setIsAddingANewElement, type, notes, sched
       const type = values.option.substring(0, 1)
       const id = parseInt(values.option.substring(2))
       let relationId
-      console.log(values)
 
       if (type === 's') {
         if (values.generalColor !== '') {

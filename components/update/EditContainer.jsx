@@ -1,10 +1,9 @@
 
 import { useState, useEffect } from 'react'
+import axios from 'axios'
+
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
-
-// import schedulesData from './../../mocks/schedules.js'
-import axios from 'axios'
 
 const EditDataContainer = () => {
   const [schedules, setSchedules] = useState([])
@@ -60,7 +59,15 @@ const EditDataContainer = () => {
         <ListOfItemsToEdit type={'note'} notes={notes} setUpdate={setIsUpdatingNotes} updateData={isUpdatingNotes}/>
         <h3>Semana</h3>
       </section>
-      <ListOfDays days={days} schedules={schedules} notes={notes} setUpdate={setIsUpdatingDays} updateData={isUpdatingDays} setUpdateData={setIsUpdatingDays} />
+
+      <ListOfDays
+        days={days}
+        setDays={setDays}
+        schedules={schedules}
+        notes={notes}
+        updateData={isUpdatingDays}
+        setUpdateData={setIsUpdatingDays}
+      />
 
       <style jsx>{`
             .container{

@@ -114,6 +114,7 @@ const DayScheduleItem = ({
         border-radius: 10px;
         padding: 15px;
         gap: 10px;
+        width: 325px;
       }
       .chosenElements__upDownElement{
         display: flex;

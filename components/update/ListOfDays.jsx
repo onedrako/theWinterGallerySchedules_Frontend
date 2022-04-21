@@ -1,19 +1,31 @@
-import { useState } from 'react'
-import parseDates from '../../utils/parseDates'
+import moment from 'moment-timezone'
+import axios from 'axios'
+
 import DayItem from './DayItem'
 
+import parseDates from '../../utils/parseDates'
+import { safeHTMLObject } from '../../utils/sanitizeObject'
+
 const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
-  console.log(days)
-  const [week, setWeek] = useState([])
-  const [scheduleData, setScheduleData] = useState([{
-    monday: {},
-    tuesday: {},
-    wednesday: {},
-    thursday: {},
-    friday: {},
-    saturday: {},
-    sunday: {}
-  }])
+  const setNewWeek = (week) => {
+    const actualWeek = [...days]
+    const newWeek = []
+    actualWeek.forEach((day, index) => {
+      day.date = moment(week[index]).format('MM-DD-YYYY')
+    })
+    actualWeek[actualWeek.length - 1].date = null
+    actualWeek.forEach(day => {
+      const { id } = day
+      const { date } = day
+      const { updatedBy } = day
+      newWeek.push({ id, date, updatedBy })
+    })
+
+    const safeObjet = safeHTMLObject({ listOfDays: newWeek })
+
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days`, safeObjet)
+      .then(() => setUpdateData(!updateData))
+  }
 
   return (
     <>
@@ -24,7 +36,7 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
           onChange={e => {
             const selectedWeek = e.target.value
             const dates = parseDates(selectedWeek)
-            setWeek(dates)
+            setNewWeek(dates)
           }} />
       </div>
 
@@ -39,7 +51,14 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
     </div>
 
     <div className='daysContainer'>
-      { days && (days.map(day => <DayItem key={`day-${day.id}`} notes={notes} schedules={schedules} day={day} setUpdate={setUpdateData} updateData={updateData} />)) }
+      { days && (days.map(day => <DayItem
+        key={`day-${day.id}`}
+        notes={notes}
+        schedules={schedules}
+        day={day}
+        setUpdate={setUpdateData}
+        updateData={updateData} />))
+      }
     </div>
 
     <style jsx>{` 
