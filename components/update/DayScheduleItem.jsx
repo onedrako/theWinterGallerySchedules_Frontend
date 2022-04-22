@@ -35,8 +35,6 @@ const DayScheduleItem = ({
   const mainTitlesColor = configs?.mainTitlesColor
   const mainTextsColor = configs?.mainTextsColor
 
-  console.log(titleColor)
-
   const { id } = schedule
 
   // Methods

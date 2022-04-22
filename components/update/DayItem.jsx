@@ -85,11 +85,11 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
     }
   }
 
-  const deleteAllRelationsPuttingOfflineState = () => {
-    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/day/${dayId}`)
-      .then(axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/day/${dayId}`))
-      .then(setUpdateList(!updateList))
-      .then(setIsTurningOffline(false))
+  const deleteAllRelationsPuttingOfflineState = async () => {
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/day/${dayId}`)
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/day/${dayId}`)
+    setUpdateList(!updateList)
+    setIsTurningOffline(false)
   }
 
   const { date } = day
@@ -112,7 +112,6 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
       listOfElementsInDay.sort((a, b) => a.order - b.order)
       listOfElementsInDay.length > 0 ? setIsOnline(true) : setIsOnline(false)
       setListOfSchedulesNotes(listOfElementsInDay)
-
       setCountOfItemsInDays(listOfElementsInDay.length)
     }
     getData()
