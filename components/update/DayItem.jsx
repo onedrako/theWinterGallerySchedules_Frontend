@@ -15,7 +15,7 @@ import capitalize from './../../utils/capitalize'
 import sanitizeObject, { safeHTMLObject } from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
-const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
+const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
   // TO ADD A NEW ITEM TO THE DAY
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
@@ -125,7 +125,6 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
 
         <div className='daysUpdateForm__dayContainer--date'>
           <h3>{formatDate}</h3>
-          <input className='colorInput' type="color" />
         </div>
 
         <div className='daysUpdateForm__dayContainer--status'>
@@ -154,9 +153,10 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
               setNewOrder={setListOfSchedulesNotes}
               setIsChangingOrder={setIsChangingOrder}
               isChangingOrder={isChangingOrder}
+              configs={configs}
             />
 
-            {(!isAddingANewElement && !isChangingOrder) && (
+            {(!isAddingANewElement && !isChangingOrder) &&
               <div className="options__container">
                 <div className='addNewItemContainer' onClick={() => {
                   setTypeOfNewElement('schedules')
@@ -173,7 +173,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData }) => {
                   <p>Notas</p>
                 </div>
               </div>
-            )}
+            }
 
             {isAddingANewElement &&
               <AddUpdateNoteScheduleItems

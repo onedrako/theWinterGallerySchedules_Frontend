@@ -21,12 +21,17 @@ const DayNoteItem = ({
   listOfItems,
   setNewOrder,
   setIsChangingOrder,
-  isChangingOrder
+  isChangingOrder,
+  configs
 }) => {
   const [isEditing, setIsEditing] = useState(false)
-  const noteData = note.note[0]
   const { id } = note
+
+  // UI
   const order = note?.order
+  const noteData = note.note[0]
+  const { titleColor, commentColor } = note
+  const { mainTitlesColor, mainTextsColor } = configs
 
   const editRelation = (type, data) => {
     data.dayId = dayId
@@ -84,8 +89,8 @@ const DayNoteItem = ({
       />
     </div>
     <div className={'chosenElements__description'}>
-      <p>{noteData.title}</p>
-      <p>{noteData.comment}</p>
+      <p className='chosenElements__description--title' >{noteData.title}</p>
+      <p className='chosenElements__description-comment'>{noteData.comment}</p>
     </div>
     {!isChangingOrder &&
       <div className="chosenElements__upDownElement">
@@ -113,6 +118,12 @@ const DayNoteItem = ({
       .chosenElements__upDownElement{
         display: flex;
         gap: 5px;
+      }
+      .chosenElements__description--title{
+        color: ${titleColor === null ? mainTitlesColor : titleColor}; 
+      }
+      .chosenElements__description-comment{
+        color: ${commentColor === null ? mainTextsColor : commentColor};
       }
       p {
         font-size: 1.6rem;

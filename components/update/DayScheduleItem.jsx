@@ -21,13 +21,25 @@ const DayScheduleItem = ({
   schedules,
   setNewOrder,
   setIsChangingOrder,
-  isChangingOrder
+  isChangingOrder,
+  configs
 }) => {
+  // States
   const [isEditing, setIsEditing] = useState(false)
   const scheduleData = schedule.schedule[0]
-  const { id } = schedule
-  const order = schedule?.order
 
+  // UI options for each item
+  const order = schedule?.order
+  const titleColor = schedule?.titleColor
+  const timeColor = schedule?.timeColor
+  const mainTitlesColor = configs?.mainTitlesColor
+  const mainTextsColor = configs?.mainTextsColor
+
+  console.log(titleColor)
+
+  const { id } = schedule
+
+  // Methods
   const editRelation = (type, data) => {
     data.dayId = dayId
     const preparedObject = objectPrepared(data)
@@ -82,13 +94,13 @@ const DayScheduleItem = ({
 
       </div>
       <div className="chosenElements__description">
-        <p>{scheduleData.title}</p>
+        <p className='chosenElements__description--title'>{scheduleData.title}</p>
         <div className="chosenElements__schedules">
-          <p>{`${scheduleData.initialTime.substr(0, 5)} `}</p>
+          <p className="chosenElements__description--time">{`${scheduleData.initialTime.substr(0, 5)} `}</p>
           {scheduleData.finalTime &&
           <>
-            <span>-</span>
-            <p>{scheduleData.finalTime.substr(0, 5)}</p>
+            <span className="chosenElements__description--time">-</span>
+            <p className="chosenElements__description--time">{scheduleData.finalTime.substr(0, 5)}</p>
           </>
           }
         </div>
@@ -125,6 +137,12 @@ const DayScheduleItem = ({
         justify-content: center;
         align-items: center;
         gap: 5px;
+      }
+      .chosenElements__description--title{
+        color : ${titleColor === null ? mainTitlesColor : titleColor};
+      }
+      .chosenElements__description--time{
+        color : ${timeColor === null ? mainTextsColor : timeColor};
       }
       p {
         font-size: 1.6rem;

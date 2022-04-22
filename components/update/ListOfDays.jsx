@@ -10,6 +10,7 @@ import { safeHTMLObject } from '../../utils/sanitizeObject'
 
 const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
   const [configs, setConfigs] = useState({})
+  const [loading, setLoading] = useState(true)
   const [isEditingOptions, setIsEditingOptions] = useState(false)
 
   const setNewWeek = (week) => {
@@ -30,13 +31,12 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
 
     axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days`, safeObjet)
       .then(() => setUpdateData(!updateData))
-      .then(() => setIsEditingOptions(false))
   }
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/configs`)
       .then(res => setConfigs(res.data))
-      .then(() => console.log(configs))
+      .then(() => setLoading(false))
   }, [])
 
   return (
@@ -50,36 +50,37 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
             setNewWeek(dates)
           }} />
       </div>
-
-      <Formik
-        initialValues = {{
-          backgroundColor: '#ffffff',
-          mainTitlesColor: '#000000',
-          mainTextsColor: '#000000'
-        }}
-        onSubmit={ async (values) => {
-          const { backgroundColor, mainTitlesColor, mainTextsColor } = values
-          const data = {
-            backgroundColor,
-            mainTitlesColor,
-            mainTextsColor
-          }
-          await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/configs/1`, data)
-        }}
-      >
-        <Form onChange={() => setIsEditingOptions(true) } >
-          <div className='selectWeekContainer'>
-          <p>Color de Fondo</p>
-          <Field type='color' name='backgroundColor' />
-          <p>Color de Títulos</p>
-          <Field type='color' name='mainTitlesColor' />
-          <p>Color de Textos</p>
-          <Field type='color' name='mainTextsColor' />
-          { isEditingOptions && <button type='submit' className='selectWeekContainer__sendChangesButton'>Guardar cambios</button>}
-          </div>
-
-        </Form>
-      </Formik>
+        {!loading &&
+          <Formik
+            initialValues = {{
+              backgroundColor: configs.backgroundColor,
+              mainTitlesColor: configs.mainTitlesColor,
+              mainTextsColor: configs.mainTextsColor
+            }}
+            onSubmit={ async (values) => {
+              const { backgroundColor, mainTitlesColor, mainTextsColor } = values
+              const data = {
+                backgroundColor,
+                mainTitlesColor,
+                mainTextsColor
+              }
+              await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/configs/1`, data)
+              setIsEditingOptions(false)
+            }}
+          >
+            <Form onChange={() => setIsEditingOptions(true) } >
+              <div className='selectWeekContainer'>
+              <p>Color de Fondo</p>
+              <Field type='color' name='backgroundColor' />
+              <p>Color de Títulos</p>
+              <Field type='color' name='mainTitlesColor' />
+              <p>Color de Textos</p>
+              <Field type='color' name='mainTextsColor' />
+              { isEditingOptions && <button type='submit' className='selectWeekContainer__sendChangesButton'>Guardar cambios</button>}
+              </div>
+            </Form>
+          </Formik>
+        }
 
       <div className='daysContainer'>
         { days && (days.map(day => <DayItem
@@ -88,7 +89,9 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData }) => {
           schedules={schedules}
           day={day}
           setUpdate={setUpdateData}
-          updateData={updateData} />))
+          updateData={updateData}
+          configs={configs}
+          />))
         }
       </div>
 
