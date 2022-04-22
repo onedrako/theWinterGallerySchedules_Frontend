@@ -5,8 +5,6 @@ const update = () => {
   return (
     <>
       <EditDataContainer className="container"/>
-      {/* <EditDaysContainer className="container"/> */}
-
       <style jsx>{`
         .container{
         

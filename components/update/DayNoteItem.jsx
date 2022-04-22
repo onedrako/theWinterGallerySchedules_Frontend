@@ -22,9 +22,12 @@ const DayNoteItem = ({
   setNewOrder,
   setIsChangingOrder,
   isChangingOrder,
-  configs
+  configs,
+  saveNewOrder
 }) => {
+  // States
   const [isEditing, setIsEditing] = useState(false)
+
   const { id } = note
 
   // UI
@@ -33,6 +36,7 @@ const DayNoteItem = ({
   const { titleColor, commentColor } = note
   const { mainTitlesColor, mainTextsColor } = configs
 
+  // Methods
   const editRelation = (type, data) => {
     data.dayId = dayId
     const preparedObject = objectPrepared(data)
@@ -42,6 +46,16 @@ const DayNoteItem = ({
   }
 
   const deleteRelation = (id) => {
+    const listOfItemsCopy = [...listOfItems]
+    const numberOfItems = listOfItemsCopy.length
+    const actualItemIndex = listOfItemsCopy.findIndex(item => item.id === id)
+    if (actualItemIndex !== numberOfItems - 1 && listOfItemsCopy[actualItemIndex].noteId) {
+      for (let i = actualItemIndex + 1; i < numberOfItems; i++) {
+        listOfItemsCopy[i].order = listOfItemsCopy[i].order - 1
+        saveNewOrder(listOfItemsCopy)
+        setNewOrder(listOfItemsCopy)
+      }
+    }
     axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`)
       .then(() => setUpdate(!updateData))
   }

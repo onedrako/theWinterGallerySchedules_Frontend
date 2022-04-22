@@ -15,7 +15,7 @@ import capitalize from './../../utils/capitalize'
 import sanitizeObject, { safeHTMLObject } from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
-const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
+const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, updateItemInDays }) => {
   // TO ADD A NEW ITEM TO THE DAY
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
@@ -115,7 +115,18 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
       setCountOfItemsInDays(listOfElementsInDay.length)
     }
     getData()
-  }, [updateList])
+  }, [updateList, updateItemInDays])
+
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     if (updateItemInDays.type === 'schedule') {
+  //       const copyOfList = [...listOfSchedulesNotes]
+  //       const element = copyOfList.filter(item => item.id === updateItemInDays.id)
+  //       console.log('element', element)
+  //     }
+  //   }
+  //   getData()
+  // }, [updateItemInDays])
 
   return (
     <>
@@ -153,6 +164,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs }) => {
               setIsChangingOrder={setIsChangingOrder}
               isChangingOrder={isChangingOrder}
               configs={configs}
+              saveNewOrder={saveNewOrder}
             />
 
             {(!isAddingANewElement && !isChangingOrder) &&

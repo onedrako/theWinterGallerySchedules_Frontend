@@ -15,6 +15,9 @@ const EditDataContainer = () => {
   const [days, setDays] = useState([])
   const [isUpdatingDays, setIsUpdatingDays] = useState(false)
 
+  // TO UPDATE THE ITEMS ON DAYS WHEN UPDATING THE SCHEDULES OR NOTES
+  const [updateItemInDays, setUpdateItemInDays] = useState({ type: '', item: {} })
+
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
       .then(res => res.data.sort((a, b) => {
@@ -53,10 +56,26 @@ const EditDataContainer = () => {
     <>
       <section className="container">
         <h2 className="title">Actualizar Datos</h2>
+
         <h3>Horarios</h3>
-        <ListOfItemsToEdit type={'schedule'} schedules={schedules} setSchedules={setSchedules} setUpdate={setIsUpdatingSchedules} updateData={isUpdatingSchedules}/>
+        <ListOfItemsToEdit
+          type={'schedule'}
+          schedules={schedules}
+          setSchedules={setSchedules}
+          setUpdate={setIsUpdatingSchedules}
+          updateData={isUpdatingSchedules}
+          setUpdateItemInDays={setUpdateItemInDays}
+        />
+
         <h3>Notas</h3>
-        <ListOfItemsToEdit type={'note'} notes={notes} setUpdate={setIsUpdatingNotes} updateData={isUpdatingNotes}/>
+        <ListOfItemsToEdit
+          type={'note'}
+          notes={notes}
+          setUpdate={setIsUpdatingNotes}
+          updateData={isUpdatingNotes}
+          setUpdateItemInDays={setUpdateItemInDays}
+        />
+
         <h3>Semana</h3>
       </section>
 
@@ -67,6 +86,7 @@ const EditDataContainer = () => {
         notes={notes}
         updateData={isUpdatingDays}
         setUpdateData={setIsUpdatingDays}
+        updateItemInDays={updateItemInDays}
       />
 
       <style jsx>{`

@@ -10,7 +10,7 @@ import objectPrepared from '../../utils/prepareObject'
 
 import iconsStyles from '../../styles/iconStyles.module.css'
 
-const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
+const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule, setUpdateItemInDays }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const { id } = scheduleData
@@ -23,6 +23,10 @@ const ScheduleItem = ({ scheduleData, editSchedule, deleteSchedule }) => {
       finalTime: finalTime
     },
     onSubmit: values => {
+      const copy = { ...scheduleData }
+      if (copy.days.length > 0) {
+        setUpdateItemInDays({ type: 'schedule', item: { ...copy } })
+      }
       const itemEdited = {
         title: values.title,
         initialTime: values.initialTime,

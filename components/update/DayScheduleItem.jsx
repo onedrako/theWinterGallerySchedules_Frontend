@@ -22,7 +22,8 @@ const DayScheduleItem = ({
   setNewOrder,
   setIsChangingOrder,
   isChangingOrder,
-  configs
+  configs,
+  saveNewOrder
 }) => {
   // States
   const [isEditing, setIsEditing] = useState(false)
@@ -47,6 +48,17 @@ const DayScheduleItem = ({
   }
 
   const deleteRelation = (id) => {
+    const listOfItemsCopy = [...listOfItems]
+    const numberOfItems = listOfItemsCopy.length
+    const actualItemIndex = listOfItemsCopy.findIndex(item => item.id === id)
+    if (actualItemIndex !== numberOfItems - 1 && listOfItemsCopy[actualItemIndex].scheduleId) {
+      for (let i = actualItemIndex + 1; i < numberOfItems; i++) {
+        listOfItemsCopy[i].order = listOfItemsCopy[i].order - 1
+        saveNewOrder(listOfItemsCopy)
+        setNewOrder(listOfItemsCopy)
+      }
+    }
+
     axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`)
       .then(() => setUpdate(!updateData))
   }

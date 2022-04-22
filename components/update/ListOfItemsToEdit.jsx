@@ -8,7 +8,7 @@ import NoteItem from './NoteItem'
 import AddNewScheduleItem from './AddNewScheduleItem'
 import AddNewNoteItem from './AddNewNoteItem'
 
-const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes }) => {
+const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setUpdateItemInDays }) => {
   const [addingNewItem, setAddingNewItem] = useState(false)
 
   // TODO: Transformar a custom HOOK para schedules
@@ -49,8 +49,8 @@ const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes }) =>
     <div className='container' >
       <div>
         { type === 'schedule'
-          ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule} deleteSchedule={deleteSchedule} />)
-          : notes.map(note => <NoteItem key={`note-${note.id}`} noteData={note} editNote={editNote} deleteNote={deleteNote} />)
+          ? schedules.map(schedule => <ScheduleItem key={`schedule-${schedule.id}`} scheduleData={schedule} editSchedule={editSchedule} deleteSchedule={deleteSchedule} setUpdateItemInDays={setUpdateItemInDays} />)
+          : notes.map(note => <NoteItem key={`note-${note.id}`} noteData={note} editNote={editNote} deleteNote={deleteNote} setUpdateItemInDays={setUpdateItemInDays}/>)
         }
         {
           type === 'schedule'

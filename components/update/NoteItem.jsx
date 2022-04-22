@@ -9,7 +9,7 @@ import { MdDeleteForever, MdCancel } from 'react-icons/md'
 import sanitizeObject from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
-const NoteItem = ({ noteData, deleteNote, editNote }) => {
+const NoteItem = ({ noteData, deleteNote, editNote, setUpdateItemInDays }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   const { id } = noteData
@@ -23,6 +23,10 @@ const NoteItem = ({ noteData, deleteNote, editNote }) => {
       comment: comment
     },
     onSubmit: values => {
+      const copy = { ...noteData }
+      if (copy.days.length > 0) {
+        setUpdateItemInDays({ type: 'note', item: { ...copy } })
+      }
       const itemEdited = {
         title: values.title,
         comment: values.comment
