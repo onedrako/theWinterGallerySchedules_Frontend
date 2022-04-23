@@ -80,10 +80,10 @@ const CardDayItem = ({ dayData, configs }) => {
         .cardContainer__items {
           display: flex;
           flex-direction: column;
-          padding: 10px;
-          gap: 20px;
-          height: 85%;
+          padding: 0 10px 0 10px;
+          height: ${day === 'FECHA INVÁLIDA' ? '90%' : '85%'};
           justify-content: center;
+          overflow: hidden;
         }
         p {
           font-size: 2.2rem;
