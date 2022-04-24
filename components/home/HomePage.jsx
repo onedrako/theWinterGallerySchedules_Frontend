@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import CardDayItem from './CardDayItem'
+import LoginLogout from '../layout/LoginLogout'
 
 const HomePage = () => {
   const [days, setDays] = useState([])
@@ -33,6 +34,7 @@ const HomePage = () => {
   return (
     <>
       <main>
+        <LoginLogout/>
         <div className="container">
         {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} />)}
         </div>
@@ -44,6 +46,7 @@ const HomePage = () => {
           width: 100%;
           background-color: ${configs.backgroundColor};
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
           overflow: hidden;
