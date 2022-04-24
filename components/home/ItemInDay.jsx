@@ -12,7 +12,6 @@ const ItemInDay = ({
   date
 }) => {
   const data = itemData.scheduleId ? itemData.schedule[0] : itemData.note[0]
-  console.log(itemData)
   const time = {
     initialTime: '',
     finalTime: ''
@@ -41,7 +40,6 @@ const ItemInDay = ({
     styles.titleColor = itemData.titleColor ? itemData.titleColor : configs.mainTitlesColor
     styles.commentColor = itemData.commentColor ? itemData.commentColor : configs.mainTitlesColor
   }
-  console.log(styles.margin)
 
   return (
     <>

@@ -29,7 +29,6 @@ const HomePage = () => {
     }
     getData()
   }, [])
-  console.log(configs)
 
   return (
     <>
