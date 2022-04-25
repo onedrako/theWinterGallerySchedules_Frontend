@@ -1,8 +1,8 @@
 import React from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
-import LoginLogoutButton from './LoginLogoutButton'
+import LoginLogoutButton from './StyledButton'
 
-const LoginLogout = () => {
+const LoginLogout = ({ theme }) => {
   const { data: session, status } = useSession()
 
   if (status === 'loading') {
@@ -11,13 +11,13 @@ const LoginLogout = () => {
   if (session == null) {
     return (
       <>
-        <LoginLogoutButton action={signIn} text={'Iniciar Sesión'}/>
+        <LoginLogoutButton action={signIn} text={'Iniciar Sesión'} theme={theme}/>
       </>
     )
   }
   return (
     <>
-      <LoginLogoutButton action={signOut} text={'Cerrar Sesión'}/>
+      <LoginLogoutButton action={signOut} text={'Cerrar Sesión'} theme={theme}/>
     </>
   )
 }

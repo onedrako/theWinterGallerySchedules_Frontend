@@ -1,6 +1,6 @@
 import React from 'react'
 
-const LoginLogoutButton = ({ action, text }) => {
+const StyledButton = ({ action, text, theme }) => {
   return (
     <>
       <button onClick={() => action()} >{text}</button>
@@ -10,9 +10,8 @@ const LoginLogoutButton = ({ action, text }) => {
           height: 30px;
           font-size: 1.2rem;
           border: none;
-          background-color: #ffffff;
+          background-color: ${theme === 'white' ? '#e4a548' : '#ffffff'};          
           border-radius: 5px;
-          margin-right: 10px;
           cursor: pointer;
         }
       `}</style>
@@ -20,4 +19,4 @@ const LoginLogoutButton = ({ action, text }) => {
   )
 }
 
-export default LoginLogoutButton
+export default StyledButton

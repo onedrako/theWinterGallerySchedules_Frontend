@@ -1,9 +1,10 @@
-
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
+import User from '../layout/User'
 
 const EditDataContainer = () => {
   const [schedules, setSchedules] = useState([])
@@ -17,6 +18,9 @@ const EditDataContainer = () => {
 
   // TO UPDATE THE ITEMS ON DAYS WHEN UPDATING THE SCHEDULES OR NOTES
   const [updateItemInDays, setUpdateItemInDays] = useState({ type: '', item: {} })
+
+  // AUTH
+  const { data: session } = useSession()
 
   useEffect(() => {
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
@@ -52,9 +56,50 @@ const EditDataContainer = () => {
     getData()
   }, [isUpdatingDays])
 
+  if (session == null) {
+    return (
+      <>
+      <main className="container">
+        <User theme="white" page={'/'} pageText="Home"/>
+        <div className="container__warning">
+          <h3>Alto ahí persona!!!, para ver este contenido tienes que iniciar sesión</h3>
+        </div>
+
+      </main>
+      <style jsx>{`
+            .container{
+              padding: 25px;
+              max-width: 1000px;
+              height: 100%;
+              margin: 0 auto;
+            }
+            .container__warning{
+              margin-top: 50px;
+              height: 500px;
+              display: flex;
+              justify-content: center;
+              place-items: center;
+              border: 1px solid #ccc;
+              border-radius: 10px;
+            }
+            h2{
+              font-size: 2.5rem;
+              margin-bottom: 25px;
+            }
+            h3{
+              font-size: 1.8rem;
+              margin-bottom: 10px;
+            }
+        `}</style>
+      </>
+    )
+  }
+
   return (
     <>
-      <section className="container">
+      <main className="container">
+        <User theme="white" page={'/'} pageText="Home"/>
+
         <h2 className="title">Actualizar Datos</h2>
 
         <h3>Horarios</h3>
@@ -77,7 +122,7 @@ const EditDataContainer = () => {
         />
 
         <h3>Semana</h3>
-      </section>
+      </main>
 
       <ListOfDays
         days={days}
@@ -93,6 +138,7 @@ const EditDataContainer = () => {
             .container{
               padding: 25px;
               max-width: 1000px;
+              height: 100%;
               margin: 0 auto;
             }
             .title{
@@ -100,6 +146,11 @@ const EditDataContainer = () => {
               padding-bottom: 10px;
               color: #e28c29;
               width: 50%;
+              margin-top: 25px;
+            }
+            .container__warning{
+              margin-top: 50px;
+              background-color: #e4a548;
             }
             h2{
               font-size: 2.5rem;

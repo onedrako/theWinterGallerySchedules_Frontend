@@ -34,7 +34,7 @@ const HomePage = () => {
     <>
       <main>
         <section className="user">
-          <User color={configs.mainTextsColor}/>
+          <User color={configs.mainTextsColor} page="./update" pageText="Actualizar Horarios"/>
         </section>
         <section className="container">
         {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} />)}
