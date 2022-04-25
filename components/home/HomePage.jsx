@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import CardDayItem from './CardDayItem'
-import LoginLogout from '../layout/LoginLogout'
+import User from '../layout/User'
 
 const HomePage = () => {
   const [days, setDays] = useState([])
@@ -33,10 +33,12 @@ const HomePage = () => {
   return (
     <>
       <main>
-        <LoginLogout/>
-        <div className="container">
+        <section className="user">
+          <User color={configs.mainTextsColor}/>
+        </section>
+        <section className="container">
         {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} />)}
-        </div>
+        </section>
       </main>
 
       <style jsx>{`
@@ -49,6 +51,13 @@ const HomePage = () => {
           justify-content: center;
           align-items: center;
           overflow: hidden;
+          /* position: relative; */
+        }
+        .user {
+          width: 100%;
+          height: 10%;
+          display: flex;
+
         }
         .container{
           width: 90%;
@@ -56,7 +65,7 @@ const HomePage = () => {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           justify-self: center;
-          padding: 50px;
+          padding: 15px 50px;
           gap: 15px;
         }
       `}</style>

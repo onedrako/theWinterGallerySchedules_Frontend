@@ -25,11 +25,8 @@ const options = {
         })
 
         const user = await res.json()
-        // console.log('user', user)
 
         if (res.ok && user) {
-          // console.log('user working')
-          console.log(user)
           return user
         }
 
@@ -40,7 +37,6 @@ const options = {
   callbacks: {
     // Getting the JWT token from API response
     async jwt ({ token, user, account, profile, isNewUser }) {
-      // console.log('data', token.token.user)
       if (user) {
         token.nickName = user.user.nickName
         token.email = user.user.email
@@ -51,11 +47,9 @@ const options = {
     },
 
     async session ({ session, token }) {
-      // console.log('session', token.nickName)
       session.user.nickName = token.nickName
       session.user.email = token.email
       session.accessToken = token.accessToken
-      console.log('session', session)
       return session
     }
   }

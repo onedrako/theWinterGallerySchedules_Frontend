@@ -1,22 +1,23 @@
 import React from 'react'
-import { signIn, signOut, useSession, getSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
+import LoginLogoutButton from './LoginLogoutButton'
 
 const LoginLogout = () => {
   const { data: session, status } = useSession()
-  console.log(session)
-  // const session1 = getSession().then(data => console.log(data))
-  // console.log(session1)
 
   if (status === 'loading') {
     return null
   }
   if (session == null) {
-    return <button onClick={() => signIn()}>{'signIn'}</button>
+    return (
+      <>
+        <LoginLogoutButton action={signIn} text={'Iniciar Sesión'}/>
+      </>
+    )
   }
   return (
     <>
-      <button onClick={() => signOut()} >  {'signOut'} </button>
-      <span>{session.user?.email}</span>
+      <LoginLogoutButton action={signOut} text={'Cerrar Sesión'}/>
     </>
   )
 }
