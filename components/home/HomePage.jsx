@@ -34,7 +34,7 @@ const HomePage = ({ id, type, update }) => {
 
   return (
     <>
-      <article id={id}>
+      <div id={id}>
         <header className="header">
             {type !== 'preview'
               ? <User color={configs.mainTextsColor} page="/update" pageText="Actualizar Horarios"/>
@@ -46,11 +46,11 @@ const HomePage = ({ id, type, update }) => {
         <section className="container">
         {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} country={id} update={update} />)}
         </section>
-      </article>
+      </div>
 
       <style jsx>{`
-        article{
-          height: 100vh;
+        div{
+          height: 100%;
           width: 100%;
           background-color: ${configs.backgroundColor};
           display: flex;

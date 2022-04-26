@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
+import domtoimage from 'dom-to-image-more'
+import { saveAs } from 'file-saver'
 
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
 import User from '../layout/User'
 import HomePage from '../home/HomePage'
+import StyledButton from '../layout/StyledButton'
 
 const EditDataContainer = () => {
   const [schedules, setSchedules] = useState([])
@@ -26,6 +29,20 @@ const EditDataContainer = () => {
   // AUTH
   const { data: session, status } = useSession()
 
+  // GET Preview Images
+
+  const saveSpainPreview = async () => {
+    if (process.browser) {
+      domtoimage.toBlob(document.getElementById('España'))
+        .then(
+          function (blob) {
+            saveAs(blob, 'my-node.png')
+          }
+        )
+    }
+  }
+
+  // EFFECTS
   useEffect(() => {
     if (status === 'loading' || status === 'unauthenticated') {
       return
@@ -164,10 +181,16 @@ const EditDataContainer = () => {
 
       <div>
         <div>
-          <h2 className="titleForPreview">Vista previa: España Peninsular</h2>
+          <div className='titleButtonToDownLoad'>
+            <h2 className="titleForPreview">Vista previa: España Peninsular</h2>
+            <StyledButton text='Descargar' theme="white" action={saveSpainPreview}/>
+          </div>
           <HomePage id="España" type="preview" update={updatePreview}/>
 
-          <h2 className="titleForPreview">Vista previa: Argentina</h2>
+          <div className='titleButtonToDownLoad'>
+            <h2 className="titleForPreview">Vista previa: Argentina</h2>
+            <StyledButton text='Descargar' theme="white" />
+          </div>
           <HomePage id="Argentina" type="preview" update={updatePreview}/>
 
           <h2 className="titleForPreview">Vista previa: México(CDMX)</h2>
@@ -193,6 +216,10 @@ const EditDataContainer = () => {
             .container__warning{
               margin-top: 50px;
               background-color: #e4a548;
+            }
+            .titleButtonToDownLoad{
+              display: flex;
+              align-items: center;
             }
             .titleForPreview{
               border-bottom: 3px solid #e4a548;
