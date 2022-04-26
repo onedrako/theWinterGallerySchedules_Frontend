@@ -20,10 +20,16 @@ const EditDataContainer = () => {
   const [updateItemInDays, setUpdateItemInDays] = useState({ type: '', item: {} })
 
   // AUTH
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  // console.log(session)
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`)
+    if (status === 'loading' || status === 'unauthenticated') {
+      return
+    }
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, {
+      headers: { Authorization: `Bearer ${session?.accessToken}` }
+    })
       .then(res => res.data.sort((a, b) => {
         if (a.initialTime < b.initialTime) {
           return -1
@@ -34,17 +40,23 @@ const EditDataContainer = () => {
         return 0
       }))
       .then(res => setSchedules(res))
-  }, [isUpdatingSchedules])
+  }, [isUpdatingSchedules, status])
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notes`)
+    if (status === 'loading' || status === 'unauthenticated') {
+      return
+    }
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/notes`, {
+      headers: { Authorization: `Bearer ${session?.accessToken}` }
+    })
       .then(res => setNotes(res.data))
-  }, [isUpdatingNotes])
+  }, [isUpdatingNotes, status])
 
   useEffect(() => {
     const getData = async () => {
       const data = []
-      const elements = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/days`).then(res => res.data)
+      const elements = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/days`)
+        .then(res => res.data)
       const elementsWithDate = elements
         .filter(element => element.date)
         .sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -54,7 +66,7 @@ const EditDataContainer = () => {
       setDays(data)
     }
     getData()
-  }, [isUpdatingDays])
+  }, [isUpdatingDays, status])
 
   if (session == null) {
     return (

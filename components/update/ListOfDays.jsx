@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import moment from 'moment-timezone'
 import axios from 'axios'
 import { Formik, Field, Form } from 'formik'
+import { useSession } from 'next-auth/react'
 
 import DayItem from './DayItem'
 
@@ -12,6 +13,7 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData, updateI
   const [configs, setConfigs] = useState({})
   const [loading, setLoading] = useState(true)
   const [isEditingOptions, setIsEditingOptions] = useState(false)
+  const { data: session } = useSession()
 
   const setNewWeek = (week) => {
     const actualWeek = [...days]
@@ -29,7 +31,9 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData, updateI
 
     const safeObjet = safeHTMLObject({ listOfDays: newWeek })
 
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days`, safeObjet)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days`, safeObjet, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(() => setUpdateData(!updateData))
   }
 
@@ -64,7 +68,9 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData, updateI
                 mainTitlesColor,
                 mainTextsColor
               }
-              await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/configs/1`, data)
+              await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/configs/1`, data, {
+                headers: { Authorization: `Bearer ${session.accessToken}` }
+              })
               setIsEditingOptions(false)
             }}
           >

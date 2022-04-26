@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 import axios from 'axios'
 
 import { FaPlusCircle } from 'react-icons/fa'
@@ -11,37 +12,52 @@ import AddNewNoteItem from './AddNewNoteItem'
 const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setUpdateItemInDays }) => {
   const [addingNewItem, setAddingNewItem] = useState(false)
 
+  // Bearer Token
+  const { data: session } = useSession()
+
   // TODO: Transformar a custom HOOK para schedules
 
   const addNewSchedule = (newItem) => {
-    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, newItem)
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/schedules`, newItem, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 
   const editSchedule = (id, itemEdited) => {
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`, itemEdited)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`, itemEdited, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 
   const deleteSchedule = (id) => {
-    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`)
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/schedules/${id}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 
   // TODO Transformar a custom HOOK para notes
   const addNewNote = (newItem) => {
-    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notes`, newItem)
+    axios.post(`${process.env.NEXT_PUBLIC_API_URL}/notes`, newItem, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 
   const editNote = (id, itemEdited) => {
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`, itemEdited)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`, itemEdited, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 
   const deleteNote = (id) => {
     console.log(id)
-    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`)
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(res => setUpdate(!updateData))
   }
 

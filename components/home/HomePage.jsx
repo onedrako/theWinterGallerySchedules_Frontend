@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+
 import CardDayItem from './CardDayItem'
 import User from '../layout/User'
 
@@ -34,7 +35,7 @@ const HomePage = () => {
     <>
       <main>
         <section className="user">
-          <User color={configs.mainTextsColor} page="./update" pageText="Actualizar Horarios"/>
+          <User color={configs.mainTextsColor} page="/update" pageText="Actualizar Horarios"/>
         </section>
         <section className="container">
         {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} />)}
