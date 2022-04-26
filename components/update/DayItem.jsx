@@ -27,7 +27,10 @@ const DayItem = ({
   updateItemInDays,
 
   updateWhenAScheduleIsDeleted,
-  updateWhenANoteIsDeleted
+  updateWhenANoteIsDeleted,
+
+  setUpdatePreview,
+  updatePreview
 }) => {
   // TO ADD A NEW ITEM TO THE DAY
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
@@ -71,8 +74,12 @@ const DayItem = ({
     const safeDataForNotes = safeHTMLObject(listOfNotes)
     const safeDataForSchedules = safeHTMLObject(listOfSchedules)
 
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeDataForSchedules)
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeDataForNotes)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeDataForSchedules, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeDataForNotes, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
 
     setIsChangingOrder(false)
   }
@@ -89,6 +96,7 @@ const DayItem = ({
       })
         .then(() => setUpdate(!updateData))
         .then(() => setUpdateList(!updateList))
+        .then(() => setUpdatePreview(!updatePreview))
     } else if (type === 'n') {
       data.dayId = dayId
       data.order = countOfItemsInDays + 1
@@ -100,14 +108,20 @@ const DayItem = ({
       })
         .then(() => setUpdate(!updateData))
         .then(() => setUpdateList(!updateList))
+        .then(() => setUpdatePreview(!updatePreview))
     }
   }
 
   const deleteAllRelationsPuttingOfflineState = async () => {
-    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/day/${dayId}`)
-    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/day/${dayId}`)
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/day/${dayId}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
+    await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/day/${dayId}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
     setUpdateList(!updateList)
     setIsTurningOffline(false)
+    setUpdatePreview(!updatePreview)
   }
 
   const { date } = day
@@ -183,6 +197,9 @@ const DayItem = ({
               isChangingOrder={isChangingOrder}
               configs={configs}
               saveNewOrder={saveNewOrder}
+
+              setUpdatePreview={setUpdatePreview}
+              updatePreview={updatePreview}
             />
 
             {(!isAddingANewElement && !isChangingOrder) &&

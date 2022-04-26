@@ -30,7 +30,7 @@ const HomePage = ({ id, type, update }) => {
         .then(res => setConfigs(res.data))
     }
     getData()
-  }, [update])
+  }, [])
 
   return (
     <>
@@ -44,7 +44,7 @@ const HomePage = ({ id, type, update }) => {
           </header>
 
         <section className="container">
-        {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} country={id} />)}
+        {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} country={id} update={update} />)}
         </section>
       </article>
 

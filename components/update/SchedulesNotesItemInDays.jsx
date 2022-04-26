@@ -12,7 +12,10 @@ const SchedulesNotesItemInDays = ({
   setIsChangingOrder,
   isChangingOrder,
   configs,
-  saveNewOrder
+  saveNewOrder,
+
+  setUpdatePreview,
+  updatePreview
 }) => {
   return (
   <>
@@ -31,6 +34,9 @@ const SchedulesNotesItemInDays = ({
           isChangingOrder={isChangingOrder}
           configs={configs}
           saveNewOrder={saveNewOrder}
+
+          setUpdatePreview={setUpdatePreview}
+          updatePreview={updatePreview}
           />
         : <DayNoteItem
           key={`dayNote-${item.id}`}
@@ -45,6 +51,9 @@ const SchedulesNotesItemInDays = ({
           isChangingOrder={isChangingOrder}
           configs={configs}
           saveNewOrder={saveNewOrder}
+
+          setUpdatePreview={setUpdatePreview}
+          updatePreview={updatePreview}
           />
     )}
   </>

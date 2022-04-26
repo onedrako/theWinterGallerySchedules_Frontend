@@ -9,7 +9,17 @@ import NoteItem from './NoteItem'
 import AddNewScheduleItem from './AddNewScheduleItem'
 import AddNewNoteItem from './AddNewNoteItem'
 
-const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setUpdateItemInDays }) => {
+const ListOfItemsToEdit = ({
+  type,
+  schedules,
+  setUpdate,
+  updateData,
+  notes,
+  setUpdateItemInDays,
+
+  setUpdatePreview,
+  updatePreview
+}) => {
   const [addingNewItem, setAddingNewItem] = useState(false)
 
   // Bearer Token
@@ -29,6 +39,7 @@ const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setU
       headers: { Authorization: `Bearer ${session.accessToken}` }
     })
       .then(res => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const deleteSchedule = (id) => {
@@ -36,6 +47,7 @@ const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setU
       headers: { Authorization: `Bearer ${session.accessToken}` }
     })
       .then(res => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   // TODO Transformar a custom HOOK para notes
@@ -51,14 +63,15 @@ const ListOfItemsToEdit = ({ type, schedules, setUpdate, updateData, notes, setU
       headers: { Authorization: `Bearer ${session.accessToken}` }
     })
       .then(res => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const deleteNote = (id) => {
-    console.log(id)
     axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/notes/${id}`, {
       headers: { Authorization: `Bearer ${session.accessToken}` }
     })
       .then(res => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   return (

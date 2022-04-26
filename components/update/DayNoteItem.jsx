@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 import { MdDeleteForever } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
@@ -23,12 +24,16 @@ const DayNoteItem = ({
   setIsChangingOrder,
   isChangingOrder,
   configs,
-  saveNewOrder
+  saveNewOrder,
+
+  setUpdatePreview,
+  updatePreview
 }) => {
   // States
   const [isEditing, setIsEditing] = useState(false)
 
   const { id } = note
+  const { data: session } = useSession()
 
   // UI
   const order = note?.order
@@ -41,8 +46,11 @@ const DayNoteItem = ({
     data.dayId = dayId
     const preparedObject = objectPrepared(data)
     const safeObject = sanitizeObject(preparedObject)
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`, safeObject)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`, safeObject, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(() => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const deleteRelation = (id) => {
@@ -56,8 +64,11 @@ const DayNoteItem = ({
         setNewOrder(listOfItemsCopy)
       }
     }
-    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`)
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-notes/${id}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(() => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const changeOrder = (id, type) => {
@@ -80,6 +91,7 @@ const DayNoteItem = ({
 
     const listOfItemsOrdered = listOfItemsCopy.sort((a, b) => a.order - b.order)
     setNewOrder(listOfItemsOrdered)
+    setUpdatePreview(!updatePreview)
   }
 
   return (

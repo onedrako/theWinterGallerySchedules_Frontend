@@ -19,7 +19,10 @@ const ListOfDays = ({
   updateItemInDays,
 
   updateWhenAScheduleIsDeleted,
-  updateWhenANoteIsDeleted
+  updateWhenANoteIsDeleted,
+
+  setUpdatePreview,
+  updatePreview
 }) => {
   const [configs, setConfigs] = useState({})
   const [loading, setLoading] = useState(true)
@@ -112,6 +115,9 @@ const ListOfDays = ({
 
           updateWhenAScheduleIsDeleted={updateWhenAScheduleIsDeleted}
           updateWhenANoteIsDeleted={updateWhenANoteIsDeleted}
+
+          setUpdatePreview={setUpdatePreview}
+          updatePreview={updatePreview}
           />))
         }
       </div>

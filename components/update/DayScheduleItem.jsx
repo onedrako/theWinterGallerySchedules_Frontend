@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 import { MdDeleteForever } from 'react-icons/md'
 import { FaEdit } from 'react-icons/fa'
@@ -23,7 +24,10 @@ const DayScheduleItem = ({
   setIsChangingOrder,
   isChangingOrder,
   configs,
-  saveNewOrder
+  saveNewOrder,
+
+  setUpdatePreview,
+  updatePreview
 }) => {
   // States
   const [isEditing, setIsEditing] = useState(false)
@@ -36,6 +40,7 @@ const DayScheduleItem = ({
   const mainTitlesColor = configs?.mainTitlesColor
   const mainTextsColor = configs?.mainTextsColor
 
+  const { data: session } = useSession()
   const { id } = schedule
 
   // Methods
@@ -43,8 +48,11 @@ const DayScheduleItem = ({
     data.dayId = dayId
     const preparedObject = objectPrepared(data)
     const safeObject = sanitizeObject(preparedObject)
-    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`, safeObject)
+    axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`, safeObject, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(() => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const deleteRelation = (id) => {
@@ -59,8 +67,11 @@ const DayScheduleItem = ({
       }
     }
 
-    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`)
+    axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules/${id}`, {
+      headers: { Authorization: `Bearer ${session.accessToken}` }
+    })
       .then(() => setUpdate(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   const changeOrder = (id, type) => {
@@ -83,6 +94,7 @@ const DayScheduleItem = ({
 
     const listOfItemsOrdered = listOfItemsCopy.sort((a, b) => a.order - b.order)
     setNewOrder(listOfItemsOrdered)
+    setUpdatePreview(!updatePreview)
   }
 
   return (

@@ -125,6 +125,9 @@ const EditDataContainer = () => {
           setUpdate={setIsUpdatingSchedules}
           updateData={isUpdatingSchedules}
           setUpdateItemInDays={setUpdateItemInDays}
+
+          setUpdatePreview={setUpdatePreview}
+          updatePreview={updatePreview}
         />
 
         <h3>Notas</h3>
@@ -134,6 +137,9 @@ const EditDataContainer = () => {
           setUpdate={setIsUpdatingNotes}
           updateData={isUpdatingNotes}
           setUpdateItemInDays={setUpdateItemInDays}
+
+          setUpdatePreview={setUpdatePreview}
+          updatePreview={updatePreview}
         />
 
         <h3>Semana</h3>
@@ -150,6 +156,9 @@ const EditDataContainer = () => {
 
         updateWhenAScheduleIsDeleted={isUpdatingSchedules}
         updateWhenANoteIsDeleted={isUpdatingNotes}
+
+        setUpdatePreview={setUpdatePreview}
+        updatePreview={updatePreview}
 
       />
 
