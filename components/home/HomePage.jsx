@@ -3,8 +3,9 @@ import axios from 'axios'
 
 import CardDayItem from './CardDayItem'
 import User from '../layout/User'
+import CountryAndFlag from './CountryAndFlag'
 
-const HomePage = () => {
+const HomePage = ({ id, type }) => {
   const [days, setDays] = useState([])
   const [configs, setConfigs] = useState([])
 
@@ -33,17 +34,22 @@ const HomePage = () => {
 
   return (
     <>
-      <main>
-        <section className="user">
-          <User color={configs.mainTextsColor} page="/update" pageText="Actualizar Horarios"/>
-        </section>
+      <article id={id}>
+        <header className="header">
+            {type !== 'preview'
+              ? <User color={configs.mainTextsColor} page="/update" pageText="Actualizar Horarios"/>
+              : <CountryAndFlag country={id} color={configs.mainTitlesColor}/>
+          }
+
+          </header>
+
         <section className="container">
-        {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} />)}
+        {days?.map(day => <CardDayItem key={`day-${day.id}`} dayData={day} configs={configs} country={id} />)}
         </section>
-      </main>
+      </article>
 
       <style jsx>{`
-        main{
+        article{
           height: 100vh;
           width: 100%;
           background-color: ${configs.backgroundColor};
@@ -54,7 +60,7 @@ const HomePage = () => {
           overflow: hidden;
           /* position: relative; */
         }
-        .user {
+        .header {
           width: 100%;
           height: 10%;
           display: flex;

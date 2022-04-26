@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import ListOfItemsToEdit from './ListOfItemsToEdit'
 import ListOfDays from './ListOfDays'
 import User from '../layout/User'
+import HomePage from '../home/HomePage'
 
 const EditDataContainer = () => {
   const [schedules, setSchedules] = useState([])
@@ -146,6 +147,20 @@ const EditDataContainer = () => {
         updateItemInDays={updateItemInDays}
       />
 
+      <div>
+        <div>
+          <h2 className="titleForPreview">Vista previa: España Peninsular</h2>
+          <HomePage id="España" type="preview"/>
+
+          <h2 className="titleForPreview">Vista previa: Argentina</h2>
+          <HomePage id="Argentina" type="preview"/>
+
+          <h2 className="titleForPreview">Vista previa: México(CDMX)</h2>
+          <HomePage id="México" type="preview"/>
+
+        </div>
+      </div>
+
       <style jsx>{`
             .container{
               padding: 25px;
@@ -163,6 +178,14 @@ const EditDataContainer = () => {
             .container__warning{
               margin-top: 50px;
               background-color: #e4a548;
+            }
+            .titleForPreview{
+              border-bottom: 3px solid #e4a548;
+              padding-bottom: 10px;
+              color: #e28c29;
+              width: 50%;
+              margin-top: 25px;
+              padding-left: 25px;
             }
             h2{
               font-size: 2.5rem;

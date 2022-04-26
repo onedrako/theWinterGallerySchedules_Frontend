@@ -12,7 +12,7 @@ const User = ({ color, theme, page, pageText }) => {
 
   return (
     <>
-    <header>
+    <section>
       {session !== null && (
         <Link className="link" href={page}>
           <a className="link">{pageText}</a>
@@ -33,9 +33,9 @@ const User = ({ color, theme, page, pageText }) => {
         <LoginLogout theme={theme}/>
       </div>
 
-    </header>
+    </section>
       <style jsx>{`
-        header{
+        section{
           width: 100%;
           height: 100%;
           padding: 0 40px;

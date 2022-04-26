@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 import ItemInDay from './ItemInDay'
 
-const CardDayItem = ({ dayData, configs }) => {
+const CardDayItem = ({ dayData, configs, country }) => {
   const [listOfSchedulesNotes, setListOfSchedulesNotes] = useState([])
   const [isOnline, setIsOnline] = useState(false)
 
@@ -47,6 +47,7 @@ const CardDayItem = ({ dayData, configs }) => {
               listOfSchedulesNotes={listOfSchedulesNotes}
               isOnline={isOnline}
               date={date}
+              country={country}
             />)}
         </div>
       </div>

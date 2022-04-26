@@ -1,20 +1,33 @@
 import moment from 'moment'
 import { initialTimeZone } from '../../utils/constants'
 
-const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-// console.log('ItemInDay.jsx: userTimeZone', userTimeZone)
+let userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
 const ItemInDay = ({
   itemData,
   configs,
-  listOfSchedulesNotes,
   isOnline,
-  date
+  date,
+  country
 }) => {
   const data = itemData.scheduleId ? itemData.schedule[0] : itemData.note[0]
   const time = {
     initialTime: '',
     finalTime: ''
+  }
+
+  switch (country) {
+    case 'España':
+      userTimeZone = 'Europe/Madrid'
+      break
+    case 'Argentina':
+      userTimeZone = 'America/Argentina/Buenos_Aires'
+      break
+    case 'México':
+      userTimeZone = 'America/Mexico_City'
+      break
+    default:
+      break
   }
 
   if (itemData.scheduleId) {
@@ -25,7 +38,6 @@ const ItemInDay = ({
       finalTimeDate = moment.tz(`${date}T${data.finalTime}`, initialTimeZone)
       time.finalTime = moment.tz(finalTimeDate, userTimeZone).format('H:mm')
     }
-    // const initialTimeDate = moment.tz(`${date}T${data.initialTime}`, initialTimeZone).format('HH:mm')
     time.initialTime = moment.tz(initialTimeDate, userTimeZone).format('H:mm')
   }
 
