@@ -1,9 +1,9 @@
 import React from 'react'
 
-const StyledButton = ({ action, text, theme }) => {
+const StyledButton = ({ action, text, theme, selector }) => {
   return (
     <>
-      <button onClick={() => action()} >{text}</button>
+      <button onClick={() => action(selector)} >{text}</button>
       <style jsx>{`
         button {
           width: 85px;

@@ -31,12 +31,13 @@ const EditDataContainer = () => {
 
   // GET Preview Images
 
-  const saveSpainPreview = async () => {
+  const savePreview = async (nodeToDownload) => {
+    await process.browser
     if (process.browser) {
-      domtoimage.toBlob(document.getElementById('España'))
+      domtoimage.toBlob(document.getElementById(nodeToDownload))
         .then(
           function (blob) {
-            saveAs(blob, 'my-node.png')
+            saveAs(blob, `Preview-${nodeToDownload}.png`)
           }
         )
     }
@@ -183,7 +184,7 @@ const EditDataContainer = () => {
         <div>
           <div className='titleButtonToDownLoad'>
             <h2 className="titleForPreview">Vista previa: España Peninsular</h2>
-            <StyledButton text='Descargar' theme="white" action={saveSpainPreview}/>
+            <StyledButton text='Descargar' theme="white" action={savePreview} selector={'España'}/>
           </div>
           <HomePage id="España" type="preview" update={updatePreview}/>
 
@@ -197,6 +198,10 @@ const EditDataContainer = () => {
           <HomePage id="México" type="preview" update={updatePreview}/>
 
         </div>
+      </div>
+
+      <div id="downloadImg">
+        <p>Hola</p>
       </div>
 
       <style jsx>{`

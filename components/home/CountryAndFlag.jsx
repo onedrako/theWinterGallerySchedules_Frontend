@@ -23,7 +23,7 @@ const CountryAndFlag = ({ country, color }) => {
   return (
     <>
       <div className='countryContainer'>
-        <Image src={imageSrc} alt={country} width={60} height={60}/>
+        <img src={imageSrc} alt={country} width={60} height={60}/>
         <div className='countryContaine__countryInfo'>
           <h3>Hora de {textForCountry}</h3>
         </div>
