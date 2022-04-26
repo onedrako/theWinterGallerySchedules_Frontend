@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
-import domtoimage from 'dom-to-image-more'
 import { saveAs } from 'file-saver'
 
 import ListOfItemsToEdit from './ListOfItemsToEdit'
@@ -31,16 +31,15 @@ const EditDataContainer = () => {
 
   // GET Preview Images
 
-  const savePreview = async (nodeToDownload) => {
-    await process.browser
-    if (process.browser) {
-      domtoimage.toBlob(document.getElementById(nodeToDownload))
+  const savePreview = async (country) => {
+    import('dom-to-image-more').then(({ default: domtoimage }) => {
+      domtoimage.toBlob(document.getElementById(country))
         .then(
           function (blob) {
-            saveAs(blob, `Preview-${nodeToDownload}.png`)
+            saveAs(blob, `Preview-${country}.png`)
           }
         )
-    }
+    })
   }
 
   // EFFECTS
@@ -190,11 +189,14 @@ const EditDataContainer = () => {
 
           <div className='titleButtonToDownLoad'>
             <h2 className="titleForPreview">Vista previa: Argentina</h2>
-            <StyledButton text='Descargar' theme="white" />
+            <StyledButton text='Descargar' theme="white" action={savePreview} selector={'Argentina'}/>
           </div>
-          <HomePage id="Argentina" type="preview" update={updatePreview}/>
+          <HomePage id="Argentina" type="preview" update={updatePreview} />
 
-          <h2 className="titleForPreview">Vista previa: México(CDMX)</h2>
+          <div className='titleButtonToDownLoad'>
+            <h2 className="titleForPreview">Vista previa: México(CDMX)</h2>
+            <StyledButton text='Descargar' theme="white" action={savePreview} selector={'México'}/>
+          </div>
           <HomePage id="México" type="preview" update={updatePreview}/>
 
         </div>
