@@ -9,7 +9,18 @@ import DayItem from './DayItem'
 import parseDates from '../../utils/parseDates'
 import { safeHTMLObject } from '../../utils/sanitizeObject'
 
-const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData, updateItemInDays }) => {
+const ListOfDays = ({
+  days,
+  notes,
+  schedules,
+
+  updateData,
+  setUpdateData,
+  updateItemInDays,
+
+  updateWhenAScheduleIsDeleted,
+  updateWhenANoteIsDeleted
+}) => {
   const [configs, setConfigs] = useState({})
   const [loading, setLoading] = useState(true)
   const [isEditingOptions, setIsEditingOptions] = useState(false)
@@ -98,6 +109,9 @@ const ListOfDays = ({ days, notes, schedules, updateData, setUpdateData, updateI
           updateData={updateData}
           configs={configs}
           updateItemInDays={updateItemInDays}
+
+          updateWhenAScheduleIsDeleted={updateWhenAScheduleIsDeleted}
+          updateWhenANoteIsDeleted={updateWhenANoteIsDeleted}
           />))
         }
       </div>

@@ -5,7 +5,7 @@ import CardDayItem from './CardDayItem'
 import User from '../layout/User'
 import CountryAndFlag from './CountryAndFlag'
 
-const HomePage = ({ id, type }) => {
+const HomePage = ({ id, type, update }) => {
   const [days, setDays] = useState([])
   const [configs, setConfigs] = useState([])
 
@@ -30,7 +30,7 @@ const HomePage = ({ id, type }) => {
         .then(res => setConfigs(res.data))
     }
     getData()
-  }, [])
+  }, [update])
 
   return (
     <>

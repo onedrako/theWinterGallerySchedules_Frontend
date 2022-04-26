@@ -20,9 +20,11 @@ const EditDataContainer = () => {
   // TO UPDATE THE ITEMS ON DAYS WHEN UPDATING THE SCHEDULES OR NOTES
   const [updateItemInDays, setUpdateItemInDays] = useState({ type: '', item: {} })
 
+  // TO UPDATE ITEMS ON PREVIEW IMAGES WHEN UPDATING OR ADDING NEW ITEMS
+  const [updatePreview, setUpdatePreview] = useState(false)
+
   // AUTH
   const { data: session, status } = useSession()
-  // console.log(session)
 
   useEffect(() => {
     if (status === 'loading' || status === 'unauthenticated') {
@@ -145,18 +147,22 @@ const EditDataContainer = () => {
         updateData={isUpdatingDays}
         setUpdateData={setIsUpdatingDays}
         updateItemInDays={updateItemInDays}
+
+        updateWhenAScheduleIsDeleted={isUpdatingSchedules}
+        updateWhenANoteIsDeleted={isUpdatingNotes}
+
       />
 
       <div>
         <div>
           <h2 className="titleForPreview">Vista previa: España Peninsular</h2>
-          <HomePage id="España" type="preview"/>
+          <HomePage id="España" type="preview" update={updatePreview}/>
 
           <h2 className="titleForPreview">Vista previa: Argentina</h2>
-          <HomePage id="Argentina" type="preview"/>
+          <HomePage id="Argentina" type="preview" update={updatePreview}/>
 
           <h2 className="titleForPreview">Vista previa: México(CDMX)</h2>
-          <HomePage id="México" type="preview"/>
+          <HomePage id="México" type="preview" update={updatePreview}/>
 
         </div>
       </div>

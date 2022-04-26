@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useSession } from 'next-auth/react'
 
 import SchedulesNotesItemInDays from './SchedulesNotesItemInDays'
 import AddUpdateNoteScheduleItems from './AddUpdateNoteScheduleItems'
@@ -15,7 +16,19 @@ import capitalize from './../../utils/capitalize'
 import sanitizeObject, { safeHTMLObject } from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
-const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, updateItemInDays }) => {
+const DayItem = ({
+  day,
+  notes,
+  schedules,
+  configs,
+
+  setUpdate,
+  updateData,
+  updateItemInDays,
+
+  updateWhenAScheduleIsDeleted,
+  updateWhenANoteIsDeleted
+}) => {
   // TO ADD A NEW ITEM TO THE DAY
   const [isAddingANewElement, setIsAddingANewElement] = useState(false)
   const [typeOfNewElement, setTypeOfNewElement] = useState('')
@@ -31,6 +44,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, update
   const [isTurningOffline, setIsTurningOffline] = useState(false)
 
   const dayId = day.id
+  const { data: session } = useSession()
 
   const saveNewOrder = (data) => {
     const listOfNotes = { listOfDaysNotes: [] }
@@ -70,7 +84,9 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, update
       setCountOfItemsInDays(countOfItemsInDays + 1)
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
-      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeObject)
+      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-schedules`, safeObject, {
+        headers: { Authorization: `Bearer ${session?.accessToken}` }
+      })
         .then(() => setUpdate(!updateData))
         .then(() => setUpdateList(!updateList))
     } else if (type === 'n') {
@@ -79,7 +95,9 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, update
       setCountOfItemsInDays(countOfItemsInDays + 1)
       const preparedObject = objectPrepared(data)
       const safeObject = sanitizeObject(preparedObject)
-      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeObject)
+      axios.post(`${process.env.NEXT_PUBLIC_API_URL}/days-notes`, safeObject, {
+        headers: { Authorization: `Bearer ${session?.accessToken}` }
+      })
         .then(() => setUpdate(!updateData))
         .then(() => setUpdateList(!updateList))
     }
@@ -115,7 +133,7 @@ const DayItem = ({ day, notes, schedules, setUpdate, updateData, configs, update
       setCountOfItemsInDays(listOfElementsInDay.length)
     }
     getData()
-  }, [updateList, updateItemInDays])
+  }, [updateList, updateItemInDays, updateWhenAScheduleIsDeleted, updateWhenANoteIsDeleted])
 
   // useEffect(() => {
   //   const getData = async () => {
