@@ -1,5 +1,4 @@
-import dynamic from 'next/dynamic'
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { saveAs } from 'file-saver'

@@ -3,7 +3,7 @@ import NextAuth from 'next-auth/next'
 
 const options = {
   theme: {
-    colorScheme: 'dark'
+    colorScheme: 'light'
   },
   debug: true,
   session: {},
