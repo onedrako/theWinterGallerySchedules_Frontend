@@ -47,10 +47,10 @@ const ItemInDay = ({
 
   if (itemData.scheduleId) {
     styles.titleColor = itemData.titleColor ? itemData.titleColor : configs.mainTitlesColor
-    styles.timeColor = itemData.timeColor ? itemData.timeColor : configs.mainTitlesColor
+    styles.timeColor = itemData.timeColor ? itemData.timeColor : configs.mainTextsColor
   } else {
     styles.titleColor = itemData.titleColor ? itemData.titleColor : configs.mainTitlesColor
-    styles.commentColor = itemData.commentColor ? itemData.commentColor : configs.mainTitlesColor
+    styles.commentColor = itemData.commentColor ? itemData.commentColor : configs.mainTextsColor
   }
 
   return (

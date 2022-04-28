@@ -27,6 +27,8 @@ const ListOfDays = ({
   const [configs, setConfigs] = useState({})
   const [loading, setLoading] = useState(true)
   const [isEditingOptions, setIsEditingOptions] = useState(false)
+  const [updateColorsOfItemsInDays, setUpdateColorsOfItemsInDays] = useState(false)
+
   const { data: session } = useSession()
 
   const setNewWeek = (week) => {
@@ -56,7 +58,7 @@ const ListOfDays = ({
     axios.get(`${process.env.NEXT_PUBLIC_API_URL}/configs`)
       .then(res => setConfigs(res.data))
       .then(() => setLoading(false))
-  }, [])
+  }, [updateColorsOfItemsInDays])
 
   return (
     <>
@@ -88,6 +90,7 @@ const ListOfDays = ({
               })
                 .then(() => setUpdatePreview(!updatePreview))
               setIsEditingOptions(false)
+              setUpdateColorsOfItemsInDays(!updateColorsOfItemsInDays)
             }}
           >
             <Form onChange={() => setIsEditingOptions(true) } >
