@@ -11,13 +11,21 @@ const LoginLogout = ({ theme }) => {
   if (session == null) {
     return (
       <>
-        <LoginLogoutButton action={signIn} text={'Iniciar Sesión'} theme={theme}/>
+        <LoginLogoutButton
+          action={signIn}
+          text={'Iniciar Sesión'}
+          theme={theme}
+        />
       </>
     )
   }
   return (
     <>
-      <LoginLogoutButton action={signOut} text={'Cerrar Sesión'} theme={theme}/>
+      <LoginLogoutButton
+        action={signOut}
+        text={'Cerrar Sesión'}
+        theme={theme}
+      />
     </>
   )
 }

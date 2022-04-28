@@ -1,14 +1,61 @@
-import React from 'react'
+import { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 import axios from 'axios'
 
 import ErrorMessageForForms from './ErrorMessageForForms'
+import LoginLogout from './LoginLogout'
 
 import safeHTML from '../../utils/sanitizeObject'
 import objectPrepared from '../../utils/prepareObject'
 
 const SignUp = () => {
+  const [newUserSuccess, setNewUserSuccess] = useState(false)
+
+  if (newUserSuccess) {
+    return (
+      <>
+        <div className='container'>
+          <div className='signup-success'>
+            <h2>¡Registro Exitoso!</h2>
+            <p>Por favor, inicia sesión para continuar</p>
+            <LoginLogout theme="white"/>
+          </div>
+        </div>
+
+        <style jsx>{`
+      .container{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 25px;
+      }
+      .signup-success{
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        padding: 25px;
+        width: 450px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      h2{
+        font-size: 2.5rem;
+        margin-bottom: 25px;
+      }
+      p{
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+      }
+    `}</style>
+      </>
+    )
+  }
+
   return (
   <>
     <Formik
@@ -44,7 +91,7 @@ const SignUp = () => {
         })
           .then(res => {
             if (res.status === 201) {
-              console.log('Usuario creado')
+              setNewUserSuccess(true)
             }
           })
       }}
