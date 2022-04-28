@@ -39,6 +39,7 @@ const CardDayItem = ({ dayData, configs, country, update }) => {
           { dateNumber !== 'Fecha inválida' && <p className="cardContainer__date--dateNumber">{dateNumber}</p> }
         </div>
         <div className="cardContainer__items">
+          {listOfSchedulesNotes.length === 0 && <div className="cardContainer__items--noData"/>}
           {listOfSchedulesNotes.map(item =>
             <ItemInDay
               key={`item-${item.id}`}
@@ -85,6 +86,12 @@ const CardDayItem = ({ dayData, configs, country, update }) => {
           height: ${day === 'FECHA INVÁLIDA' ? '90%' : '85%'};
           justify-content: center;
           overflow: hidden;
+        }
+        .cardContainer__items--noData {
+          margin: 0 auto;
+          width: 80%;
+          border: 3px solid ${configs.mainTitlesColor};
+          transform: rotate(130deg);
         }
         p {
           font-size: 2.2rem;

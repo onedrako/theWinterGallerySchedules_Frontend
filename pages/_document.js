@@ -8,6 +8,7 @@ export default function Document () {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
         <title>Horarios The Winter Gallery</title>
         <link rel="icon" type="image/x-icon" href="https://static-cdn.jtvnw.net/emoticons/v2/emotesv2_fe9148f50c27490298c1a91f4ae5e0ae/default/dark/1.0"/>
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       <body>
         <Main />

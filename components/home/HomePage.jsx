@@ -50,7 +50,7 @@ const HomePage = ({ id, type, update }) => {
 
       <style jsx>{`
         div{
-          height: 100%;
+          height: ${type === 'preview' ? '100%' : '100vh'};
           width: 100%;
           background-color: ${configs.backgroundColor};
           display: flex;
