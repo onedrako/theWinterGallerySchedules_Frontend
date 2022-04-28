@@ -49,6 +49,7 @@ const ListOfDays = ({
       headers: { Authorization: `Bearer ${session.accessToken}` }
     })
       .then(() => setUpdateData(!updateData))
+      .then(() => setUpdatePreview(!updatePreview))
   }
 
   useEffect(() => {
@@ -85,6 +86,7 @@ const ListOfDays = ({
               await axios.patch(`${process.env.NEXT_PUBLIC_API_URL}/configs/1`, data, {
                 headers: { Authorization: `Bearer ${session.accessToken}` }
               })
+                .then(() => setUpdatePreview(!updatePreview))
               setIsEditingOptions(false)
             }}
           >

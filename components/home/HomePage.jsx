@@ -22,7 +22,7 @@ const HomePage = ({ id, type, update }) => {
       setDays(data)
     }
     getData()
-  }, [])
+  }, [update])
 
   useEffect(() => {
     const getData = async () => {
@@ -30,7 +30,7 @@ const HomePage = ({ id, type, update }) => {
         .then(res => setConfigs(res.data))
     }
     getData()
-  }, [])
+  }, [update])
 
   return (
     <>
