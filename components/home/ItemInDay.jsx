@@ -90,7 +90,7 @@ const ItemInDay = ({
           margin-top: ${styles.marginForTitles};
         }
         .item__noteComment{
-          color: ${styles.titleColor};
+          color: ${styles.commentColor};
         }
         h4{
           font-size: 2.3rem;
